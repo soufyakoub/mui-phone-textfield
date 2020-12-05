@@ -46,7 +46,7 @@ for index, path in enumerate(flag_paths, 1):
 # Generating the sprite's corresponding css classes.
 loader = jinja2.FileSystemLoader("./")
 env = jinja2.Environment(loader=loader)
-template = env.get_template("sprite.css.jinja")
+template = env.get_template("src/sprite.css.jinja")
 sprite_css = template.render(
     {
         "path": "sprite.png",  # The sprite's relative path from the src directory.
