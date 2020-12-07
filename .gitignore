@@ -1,3 +1,6 @@
 .vscode
 src/sprite.css
 src/sprite.png
+node_modules
+examples/public/bundle.js
+dist

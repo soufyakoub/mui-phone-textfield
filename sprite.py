@@ -52,7 +52,7 @@ sprite_css = template.render(
         "path": "sprite.png",  # The sprite's relative path from the src directory.
         "width": sprite_size[0],
         "height": sprite_size[1],
-        "flags": flag_positions,
+        "flag": {"width": width_col, "height": height_row, "positions": flag_positions},
     }
 )
 
