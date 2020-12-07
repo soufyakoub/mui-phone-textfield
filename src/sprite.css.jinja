@@ -1,16 +1,22 @@
 .flag {
-    background-image: url({{path}});
+    /* Will be replaced with a Base64 url. */
+    background-image: inline("{{path}}");
+
     background-repeat: no-repeat;
+
     /* To support retina displays, the sprite's size is doubled. */
     background-size: {{width // 2}}px {{height // 2}}px;
+
+    width: {{flag.width // 2}}px;
+    height: {{flag.height // 2}}px;
     display: inline-block;
     overflow: hidden;
     position: relative;
     box-sizing: content-box;
 }
 
-{% for flag in flags %}
-.flag-{{flag.country_code}} {
-        background-position: -{{flag.x // 2}}px -{{flag.y // 2}}px;
+{% for flag_position in flag.positions %}
+.flag-{{flag_position.country_code}} {
+        background-position: -{{flag_position.x // 2}}px -{{flag_position.y // 2}}px;
 }
 {% endfor %}

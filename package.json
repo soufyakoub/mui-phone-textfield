@@ -1,0 +1,50 @@
+{
+  "name": "mui-phone-number-input",
+  "version": "0.0.0",
+  "description": "A phone number input for Material-UI.",
+  "main": "dist/bundle.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "examples:serve": "NODE_ENV=development rollup -cw & webpack serve -c examples/webpack.config.js",
+    "examples": "NODE_ENV=production rollup -c && webpack -c examples/webpack.config.js",
+    "build": "NODE_ENV=production rollup -c",
+    "watch": "NODE_ENV=development rollup -cw"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/soufyakoub/mui-phone-number-input.git"
+  },
+  "author": {
+    "name": "Soufiane Yakoubi",
+    "email": "splentercell.1997@gmail.com"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/soufyakoub/mui-phone-number-input/issues"
+  },
+  "homepage": "https://github.com/soufyakoub/mui-phone-number-input#readme",
+  "devDependencies": {
+    "@babel/core": "^7.12.9",
+    "@babel/preset-env": "^7.12.7",
+    "@babel/preset-react": "^7.12.7",
+    "@material-ui/core": "^4.11.2",
+    "@rollup/plugin-babel": "^5.2.2",
+    "@rollup/plugin-commonjs": "^17.0.0",
+    "@rollup/plugin-node-resolve": "^11.0.0",
+    "babel-loader": "^8.2.2",
+    "cssnano": "^4.1.10",
+    "postcss-assets": "^5.0.0",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "rollup": "^2.34.2",
+    "rollup-plugin-postcss": "^4.0.0",
+    "rollup-plugin-terser": "^7.0.2",
+    "webpack": "^5.10.0",
+    "webpack-cli": "^4.2.0",
+    "webpack-dev-server": "^3.11.0"
+  },
+  "peerDependencies": {
+    "@material-ui/core": ">= 4.x.x",
+    "react": ">= 17.x.x"
+  }
+}
