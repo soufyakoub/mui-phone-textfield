@@ -59,5 +59,9 @@ sprite_css = template.render(
 with open("src/sprite.css", "w") as file:
     file.write(sprite_css)
 
+print("Generated sprite.css")
+
 # Quantize the result sprite to reduce its size then save it.
 sprite.quantize().save("src/sprite.png")
+
+print("Generated sprite.png")
