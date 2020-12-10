@@ -7,6 +7,8 @@ import cssnano from "cssnano";
 import { terser } from "rollup-plugin-terser";
 import path from "path";
 
+const production = process.env.NODE_ENV === "production";
+
 export default {
 	input: path.join(__dirname, "src", 'index.js'),
 	output: {
@@ -19,7 +21,7 @@ export default {
 		resolve(),
 		babel({ babelHelpers: "bundled", exclude: /node_modules/ }),
 		commonjs(),
-		postcss({ plugins: [postcss_assets(), cssnano()] }),
-		terser()
+		postcss({ plugins: [postcss_assets(), production && cssnano()] }),
+		production && terser()
 	],
 };
