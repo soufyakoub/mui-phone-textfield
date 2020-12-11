@@ -57,7 +57,7 @@ export default function Menu({ territoryDisplayNames, onClick }) {
 	};
 
 	return (
-		<div>
+		<>
 			<Button
 				aria-controls="countries-menu"
 				aria-haspopup="true"
@@ -66,6 +66,7 @@ export default function Menu({ territoryDisplayNames, onClick }) {
 				<Flag countryCode={countryCode} className={classes.flag_border} />
 				<ArrowDropDownIcon />
 			</Button>
+
 			<Popover
 				keepMounted
 				anchorEl={anchorEl}
@@ -75,11 +76,13 @@ export default function Menu({ territoryDisplayNames, onClick }) {
 					className: classes.popover,
 					id: "countries-menu",
 				}}>
+
 				<FixedSizeList
 					height={MENU_HEIGHT}
 					width={MENU_WIDTH}
 					itemSize={ITEM_SIZE}
 					itemCount={menuData.length}>
+
 					{({ index, style }) => <ListItem
 						style={{
 							...style,
@@ -99,8 +102,9 @@ export default function Menu({ territoryDisplayNames, onClick }) {
 							primary={territories[menuData[index].countryCode]}
 							secondary={"+" + menuData[index].callingCode} />
 					</ListItem>}
+
 				</FixedSizeList>
 			</Popover>
-		</div>
+		</>
 	);
 }
