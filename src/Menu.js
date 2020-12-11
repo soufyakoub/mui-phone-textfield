@@ -67,6 +67,7 @@ export default function Menu({ territoryDisplayNames, onClick }) {
 				<ArrowDropDownIcon />
 			</Button>
 			<Popover
+				keepMounted
 				anchorEl={anchorEl}
 				open={Boolean(anchorEl)}
 				onClose={handleClose}
@@ -88,6 +89,7 @@ export default function Menu({ territoryDisplayNames, onClick }) {
 						onClick={handleMenuItemClick}
 						data-country-code={menuData[index].countryCode}
 						data-calling-code={menuData[index].callingCode}
+						selected={menuData[index].countryCode === countryCode}
 						button
 						dense>
 						<ListItemIcon>
