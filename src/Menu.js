@@ -9,6 +9,7 @@ import { getCountries, getCountryCallingCode } from "libphonenumber-js";
 import { FixedSizeList } from "react-window";
 import ArrowDropDownIcon from './ArrowDropDownIcon';
 import Flag from "./Flag";
+import territoriesJson from "cldr-localenames-full/main/en/territories.json";
 
 const useStyles = makeStyles(() => ({
 	flag_button: {
@@ -25,9 +26,10 @@ const useStyles = makeStyles(() => ({
 
 const country_codes = getCountries();
 
-export default function Menu() {
+export default function Menu({ territoryDisplayNames }) {
+	const territories = Object.assign(territoriesJson.main.en.localeDisplayNames.territories, territoryDisplayNames);
 	const ITEM_SIZE = 45;
-	const MENU_WIDTH = 140;
+	const MENU_WIDTH = 300;
 	// specZ: The maximum height of a simple menu should be one or more rows less than the view
 	// height. This ensures a tapable area outside of the simple menu with which to dismiss
 	// the menu.
@@ -86,7 +88,7 @@ export default function Menu() {
 							<Flag countryCode={country_codes[index]} className={classes.flag_border} />
 						</ListItemIcon>
 						<ListItemText
-							primary={country_codes[index]}
+							primary={territories[country_codes[index]]}
 							secondary={"+" + getCountryCallingCode(country_codes[index])} />
 					</ListItem>}
 				</FixedSizeList>

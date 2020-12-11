@@ -4,13 +4,19 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import Menu from "./Menu";
 
 export default function PhoneTextField(props) {
+	const {
+		territoryDisplayNames,
+		...rest
+	} = props;
 
 	return <TextField
-		{...props}
+		{...rest}
 		InputProps={{
 			startAdornment: (
 				<InputAdornment position="start">
-					<Menu />
+					<Menu
+						territoryDisplayNames={territoryDisplayNames}
+					/>
 				</InputAdornment>
 			),
 		}}
