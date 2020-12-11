@@ -4,6 +4,7 @@ import commonjs from '@rollup/plugin-commonjs';
 import postcss from 'rollup-plugin-postcss';
 import postcss_assets from "postcss-assets";
 import cssnano from "cssnano";
+import json from "@rollup/plugin-json";
 import { terser } from "rollup-plugin-terser";
 import path from "path";
 
@@ -19,6 +20,7 @@ export default {
 	external: id => /react|@material-ui/.test(id),
 	plugins: [
 		resolve(),
+		json(),
 		babel({ babelHelpers: "bundled", exclude: /node_modules/ }),
 		commonjs(),
 		postcss({ plugins: [postcss_assets(), production && cssnano()] }),
