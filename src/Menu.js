@@ -26,7 +26,7 @@ const useStyles = makeStyles(() => ({
 
 const country_codes = getCountries();
 
-export default function Menu({ territoryDisplayNames }) {
+export default function Menu({ territoryDisplayNames, onClick }) {
 	const territories = Object.assign(territoriesJson.main.en.localeDisplayNames.territories, territoryDisplayNames);
 	const ITEM_SIZE = 45;
 	const MENU_WIDTH = 300;
@@ -47,8 +47,13 @@ export default function Menu({ territoryDisplayNames }) {
 	};
 
 	const handleMenuItemClick = event => {
-		setCountryCode(event.currentTarget.dataset.countryCode);
+		const countryCode = event.currentTarget.dataset.countryCode;
+		setCountryCode(countryCode);
 		handleClose();
+
+		if (typeof onClick === "function") {
+			onClick(event, countryCode);
+		}
 	};
 
 	return (
