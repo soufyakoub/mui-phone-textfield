@@ -24,7 +24,7 @@ const useStyles = makeStyles(() => ({
 	}
 }));
 
-const country_codes = getCountries();
+const menuData = getCountries().map(countryCode => ({ countryCode, callingCode: getCountryCallingCode(countryCode) }));
 
 export default function Menu({ territoryDisplayNames, onClick }) {
 	const territories = Object.assign(territoriesJson.main.en.localeDisplayNames.territories, territoryDisplayNames);
@@ -36,7 +36,7 @@ export default function Menu({ territoryDisplayNames, onClick }) {
 	const MENU_HEIGHT = window.innerHeight - ITEM_SIZE * 2;
 	const classes = useStyles();
 	const [anchorEl, setAnchorEl] = useState(null);
-	const [country_code, setCountryCode] = useState("MA");
+	const [countryCode, setCountryCode] = useState("MA");
 
 	const handleClick = (event) => {
 		setAnchorEl(event.currentTarget);
@@ -47,12 +47,12 @@ export default function Menu({ territoryDisplayNames, onClick }) {
 	};
 
 	const handleMenuItemClick = event => {
-		const countryCode = event.currentTarget.dataset.countryCode;
-		setCountryCode(countryCode);
+		const dataset = event.currentTarget.dataset;
+		setCountryCode(dataset.countryCode);
 		handleClose();
 
 		if (typeof onClick === "function") {
-			onClick(event, countryCode);
+			onClick(event, { countryCode: dataset.countryCode, callingCode: dataset.callingCode });
 		}
 	};
 
@@ -63,7 +63,7 @@ export default function Menu({ territoryDisplayNames, onClick }) {
 				aria-haspopup="true"
 				onClick={handleClick}
 				className={classes.flag_button}>
-				<Flag countryCode={country_code} className={classes.flag_border} />
+				<Flag countryCode={countryCode} className={classes.flag_border} />
 				<ArrowDropDownIcon />
 			</Button>
 			<Popover
@@ -78,7 +78,7 @@ export default function Menu({ territoryDisplayNames, onClick }) {
 					height={MENU_HEIGHT}
 					width={MENU_WIDTH}
 					itemSize={ITEM_SIZE}
-					itemCount={country_codes.length}>
+					itemCount={menuData.length}>
 					{({ index, style }) => <ListItem
 						style={{
 							...style,
@@ -86,15 +86,16 @@ export default function Menu({ territoryDisplayNames, onClick }) {
 							paddingBottom: 0,
 						}}
 						onClick={handleMenuItemClick}
-						data-country-code={country_codes[index]}
+						data-country-code={menuData[index].countryCode}
+						data-calling-code={menuData[index].callingCode}
 						button
 						dense>
 						<ListItemIcon>
-							<Flag countryCode={country_codes[index]} className={classes.flag_border} />
+							<Flag countryCode={menuData[index].countryCode} className={classes.flag_border} />
 						</ListItemIcon>
 						<ListItemText
-							primary={territories[country_codes[index]]}
-							secondary={"+" + getCountryCallingCode(country_codes[index])} />
+							primary={territories[menuData[index].countryCode]}
+							secondary={"+" + menuData[index].callingCode} />
 					</ListItem>}
 				</FixedSizeList>
 			</Popover>
