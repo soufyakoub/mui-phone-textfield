@@ -19,7 +19,7 @@ const externals = [
 ];
 
 export default {
-	input: path.join(__dirname, "src", 'PhoneTextField.tsx'),
+	input: path.join(__dirname, "src", 'index.tsx'),
 	output: [
 		{
 			file: pkg.main,

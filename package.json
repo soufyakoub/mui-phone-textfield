@@ -2,9 +2,9 @@
   "name": "mui-phone-number-input",
   "version": "0.0.0",
   "description": "A phone number input for Material-UI.",
-  "main": "dist/PhoneTextField.cjs.js",
-  "module": "dist/PhoneTextField.esm.js",
-  "types": "dist/PhoneTextField.d.ts",
+  "main": "dist/bundle.cjs.js",
+  "module": "dist/bundle.esm.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "examples:serve": "NODE_ENV=development rollup -cw & webpack serve -c examples/webpack.config.js",
