@@ -26,13 +26,13 @@ const useStyles = makeStyles(() => ({
 
 const menuData = getCountries().map(countryCode => ({ countryCode, callingCode: getCountryCallingCode(countryCode) }));
 
-export interface MenuProps {
+export interface CountriesMenuProps {
 	currrentCountry: CountryCode,
 	territoryDisplayNames?: Record<CountryCode, string>,
 	onItemClick: (data: { countryCode: CountryCode, callingCode: CountryCallingCode }) => void
 }
 
-export default function Menu({ currrentCountry, territoryDisplayNames, onItemClick }: MenuProps) {
+export default function CountriesMenu({ currrentCountry, territoryDisplayNames, onItemClick }: CountriesMenuProps) {
 	const territories = { ...territoriesJson.main.en.localeDisplayNames.territories, ...territoryDisplayNames };
 	const ITEM_SIZE = 45;
 	const MENU_WIDTH = 300;
