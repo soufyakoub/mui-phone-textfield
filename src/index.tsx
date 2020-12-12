@@ -1,13 +1,20 @@
 import React from "react";
-import TextField from "@material-ui/core/TextField";
+import TextField, { TextFieldProps } from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import Menu from "./Menu";
+import { CountryCode } from "libphonenumber-js";
 
-export default function PhoneTextField(props) {
+type PhoneTextFieldProps = TextFieldProps & {
+	territoryDisplayNames?: Record<CountryCode, string>,
+};
+
+export default function PhoneTextField(props: PhoneTextFieldProps) {
 	const {
 		territoryDisplayNames,
 		...rest
 	} = props;
+
+	const handleMenuItemClick = () => { };
 
 	return <TextField
 		{...rest}
@@ -16,6 +23,7 @@ export default function PhoneTextField(props) {
 				<InputAdornment position="start">
 					<Menu
 						territoryDisplayNames={territoryDisplayNames}
+						onItemClick={handleMenuItemClick}
 					/>
 				</InputAdornment>
 			),

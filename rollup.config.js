@@ -5,13 +5,15 @@ import postcss from 'rollup-plugin-postcss';
 import postcss_assets from "postcss-assets";
 import cssnano from "cssnano";
 import json from "@rollup/plugin-json";
+import typescript from 'rollup-plugin-typescript2';
 import { terser } from "rollup-plugin-terser";
 import path from "path";
 
 const production = process.env.NODE_ENV === "production";
+const extensions = ['.ts', '.tsx', '.js', '.json'];
 
 export default {
-	input: path.join(__dirname, "src", 'index.js'),
+	input: path.join(__dirname, "src", 'index.tsx'),
 	output: {
 		file: path.join(__dirname, "dist", 'bundle.js'),
 		format: 'cjs',
@@ -19,9 +21,10 @@ export default {
 	},
 	external: id => /react|@material-ui/.test(id),
 	plugins: [
-		resolve(),
+		resolve({ extensions }),
+		typescript(),
 		json(),
-		babel({ babelHelpers: "bundled", exclude: /node_modules/ }),
+		babel({ extensions, babelHelpers: "bundled", exclude: /node_modules/ }),
 		commonjs(),
 		postcss({ plugins: [postcss_assets(), production && cssnano()] }),
 		production && terser()
