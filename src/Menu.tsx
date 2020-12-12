@@ -1,9 +1,9 @@
-import React, { useState, MouseEvent, MouseEventHandler } from 'react';
-import Button, { ButtonProps } from '@material-ui/core/Button';
-import ListItem, { ListItemProps } from '@material-ui/core/ListItem';
+import React, { useState, MouseEvent } from 'react';
+import Button from '@material-ui/core/Button';
+import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import Popover, { PopoverProps } from "@material-ui/core/Popover";
+import Popover from "@material-ui/core/Popover";
 import { makeStyles } from '@material-ui/core/styles';
 import { CountryCallingCode, CountryCode, getCountries, getCountryCallingCode } from "libphonenumber-js";
 import { FixedSizeList } from "react-window";
@@ -26,13 +26,14 @@ const useStyles = makeStyles(() => ({
 
 const menuData = getCountries().map(countryCode => ({ countryCode, callingCode: getCountryCallingCode(countryCode) }));
 
-interface MenuProps {
+export interface MenuProps {
+	currrentCountry: CountryCode,
 	territoryDisplayNames?: Record<CountryCode, string>,
 	onItemClick: (data: { countryCode: CountryCode, callingCode: CountryCallingCode }) => void
 }
 
-export default function Menu({ territoryDisplayNames, onItemClick }: MenuProps) {
-	const territories = Object.assign(territoriesJson.main.en.localeDisplayNames.territories, territoryDisplayNames);
+export default function Menu({ currrentCountry, territoryDisplayNames, onItemClick }: MenuProps) {
+	const territories = { ...territoriesJson.main.en.localeDisplayNames.territories, ...territoryDisplayNames };
 	const ITEM_SIZE = 45;
 	const MENU_WIDTH = 300;
 	// specZ: The maximum height of a simple menu should be one or more rows less than the view
@@ -41,7 +42,6 @@ export default function Menu({ territoryDisplayNames, onItemClick }: MenuProps) 
 	const MENU_HEIGHT = window.innerHeight - ITEM_SIZE * 2;
 	const classes = useStyles();
 	const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-	const [countryCode, setCountryCode] = useState<CountryCode>("MA");
 
 	const handleClick = (event: MouseEvent<HTMLElement>) => {
 		setAnchorEl(event.currentTarget);
@@ -53,12 +53,11 @@ export default function Menu({ territoryDisplayNames, onItemClick }: MenuProps) 
 
 	const handleMenuItemClick = (event: MouseEvent<HTMLElement>) => {
 		const dataset = event.currentTarget.dataset;
-		const _countryCode = dataset.countryCode as CountryCode;
-		const _callingCode = dataset.callingCode as CountryCallingCode;
-		setCountryCode(_countryCode);
+		const countryCode = dataset.countryCode as CountryCode;
+		const callingCode = dataset.callingCode as CountryCallingCode;
 		handleClose();
 
-		onItemClick({ countryCode: _countryCode, callingCode: _callingCode });
+		onItemClick({ countryCode, callingCode });
 	};
 
 	return (
@@ -68,7 +67,7 @@ export default function Menu({ territoryDisplayNames, onItemClick }: MenuProps) 
 				aria-haspopup="true"
 				onClick={handleClick}
 				className={classes.flag_button}>
-				<Flag countryCode={countryCode} className={classes.flag_border} />
+				<Flag countryCode={currrentCountry} className={classes.flag_border} />
 				<ArrowDropDownIcon />
 			</Button>
 
@@ -96,7 +95,7 @@ export default function Menu({ territoryDisplayNames, onItemClick }: MenuProps) 
 						onClick={handleMenuItemClick}
 						data-country-code={menuData[index].countryCode}
 						data-calling-code={menuData[index].callingCode}
-						selected={menuData[index].countryCode === countryCode}
+						selected={menuData[index].countryCode === currrentCountry}
 						button
 						dense>
 						<ListItemIcon>

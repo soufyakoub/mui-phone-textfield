@@ -1,20 +1,24 @@
-import React from "react";
+import React, {useState} from "react";
 import TextField, { TextFieldProps } from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
-import Menu from "./Menu";
+import Menu, {MenuProps} from "./Menu";
 import { CountryCode } from "libphonenumber-js";
 
-type PhoneTextFieldProps = TextFieldProps & {
-	territoryDisplayNames?: Record<CountryCode, string>,
+export type PhoneTextFieldProps = TextFieldProps & {
+	territoryDisplayNames?: MenuProps["territoryDisplayNames"],
 };
 
 export default function PhoneTextField(props: PhoneTextFieldProps) {
+	const [currentCountry, setCurrentCountry] = useState<CountryCode>("MA");
+
 	const {
 		territoryDisplayNames,
 		...rest
 	} = props;
 
-	const handleMenuItemClick = () => { };
+	const handleMenuItemClick: MenuProps["onItemClick"] = ({countryCode})=>{
+		setCurrentCountry(countryCode);
+	}
 
 	return <TextField
 		{...rest}
@@ -22,6 +26,7 @@ export default function PhoneTextField(props: PhoneTextFieldProps) {
 			startAdornment: (
 				<InputAdornment position="start">
 					<Menu
+						currrentCountry={currentCountry}
 						territoryDisplayNames={territoryDisplayNames}
 						onItemClick={handleMenuItemClick}
 					/>
