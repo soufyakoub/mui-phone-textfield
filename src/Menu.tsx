@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import Button from '@material-ui/core/Button';
-import ListItem from '@material-ui/core/ListItem';
+import React, { useState, MouseEvent, MouseEventHandler } from 'react';
+import Button, { ButtonProps } from '@material-ui/core/Button';
+import ListItem, { ListItemProps } from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import Popover from "@material-ui/core/Popover";
+import Popover, { PopoverProps } from "@material-ui/core/Popover";
 import { makeStyles } from '@material-ui/core/styles';
-import { getCountries, getCountryCallingCode } from "libphonenumber-js";
+import { CountryCallingCode, CountryCode, getCountries, getCountryCallingCode } from "libphonenumber-js";
 import { FixedSizeList } from "react-window";
 import ArrowDropDownIcon from './ArrowDropDownIcon';
 import Flag from "./Flag";
@@ -26,7 +26,12 @@ const useStyles = makeStyles(() => ({
 
 const menuData = getCountries().map(countryCode => ({ countryCode, callingCode: getCountryCallingCode(countryCode) }));
 
-export default function Menu({ territoryDisplayNames, onClick }) {
+interface MenuProps {
+	territoryDisplayNames?: Record<CountryCode, string>,
+	onItemClick: (data: { countryCode: CountryCode, callingCode: CountryCallingCode }) => void
+}
+
+export default function Menu({ territoryDisplayNames, onItemClick }: MenuProps) {
 	const territories = Object.assign(territoriesJson.main.en.localeDisplayNames.territories, territoryDisplayNames);
 	const ITEM_SIZE = 45;
 	const MENU_WIDTH = 300;
@@ -35,10 +40,10 @@ export default function Menu({ territoryDisplayNames, onClick }) {
 	// the menu.
 	const MENU_HEIGHT = window.innerHeight - ITEM_SIZE * 2;
 	const classes = useStyles();
-	const [anchorEl, setAnchorEl] = useState(null);
-	const [countryCode, setCountryCode] = useState("MA");
+	const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+	const [countryCode, setCountryCode] = useState<CountryCode>("MA");
 
-	const handleClick = (event) => {
+	const handleClick = (event: MouseEvent<HTMLElement>) => {
 		setAnchorEl(event.currentTarget);
 	};
 
@@ -46,14 +51,14 @@ export default function Menu({ territoryDisplayNames, onClick }) {
 		setAnchorEl(null);
 	};
 
-	const handleMenuItemClick = event => {
+	const handleMenuItemClick = (event: MouseEvent<HTMLElement>) => {
 		const dataset = event.currentTarget.dataset;
-		setCountryCode(dataset.countryCode);
+		const _countryCode = dataset.countryCode as CountryCode;
+		const _callingCode = dataset.callingCode as CountryCallingCode;
+		setCountryCode(_countryCode);
 		handleClose();
 
-		if (typeof onClick === "function") {
-			onClick(event, { countryCode: dataset.countryCode, callingCode: dataset.callingCode });
-		}
+		onItemClick({ countryCode: _countryCode, callingCode: _callingCode });
 	};
 
 	return (
@@ -73,7 +78,6 @@ export default function Menu({ territoryDisplayNames, onClick }) {
 				open={Boolean(anchorEl)}
 				onClose={handleClose}
 				PaperProps={{
-					className: classes.popover,
 					id: "countries-menu",
 				}}>
 
