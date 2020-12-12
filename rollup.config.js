@@ -20,11 +20,17 @@ const externals = [
 
 export default {
 	input: path.join(__dirname, "src", 'PhoneTextField.tsx'),
-	output: {
-		file: pkg.main,
-		format: 'cjs',
-		exports: "named"
-	},
+	output: [
+		{
+			file: pkg.main,
+			format: 'cjs',
+			exports: "named"
+		},
+		{
+			file: pkg.module,
+			format: 'esm',
+		}
+	],
 	external: id => new RegExp(externals.join("|")).test(id),
 	plugins: [
 		resolve({ extensions }),

@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import Grid from "@material-ui/core/Grid";
-import PhoneInput from "../dist/bundle.js";
+import PhoneInput from "..";
 
 const input_props = [
 	{ size: "medium", variant: "outlined" },
