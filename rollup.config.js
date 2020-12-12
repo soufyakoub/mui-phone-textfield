@@ -8,18 +8,24 @@ import json from "@rollup/plugin-json";
 import typescript from 'rollup-plugin-typescript2';
 import { terser } from "rollup-plugin-terser";
 import path from "path";
+import pkg from "./package.json";
 
 const production = process.env.NODE_ENV === "production";
 const extensions = ['.ts', '.tsx', '.js', '.json'];
+const externals = [
+	...Object.keys(pkg.peerDependencies),
+	// We want to include the json from "cldr-localenames-full" in the bundle.
+	...Object.keys(pkg.dependencies).filter(dep => dep !== "cldr-localenames-full"),
+];
 
 export default {
-	input: path.join(__dirname, "src", 'index.tsx'),
+	input: path.join(__dirname, "src", 'PhoneTextField.tsx'),
 	output: {
-		file: path.join(__dirname, "dist", 'bundle.js'),
+		file: pkg.main,
 		format: 'cjs',
 		exports: "named"
 	},
-	external: id => /react|@material-ui/.test(id),
+	external: id => new RegExp(externals.join("|")).test(id),
 	plugins: [
 		resolve({ extensions }),
 		typescript(),
