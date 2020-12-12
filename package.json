@@ -2,7 +2,8 @@
   "name": "mui-phone-number-input",
   "version": "0.0.0",
   "description": "A phone number input for Material-UI.",
-  "main": "dist/PhoneTextField.js",
+  "main": "dist/PhoneTextField.cjs.js",
+  "module": "dist/PhoneTextField.esm.js",
   "types": "dist/PhoneTextField.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
