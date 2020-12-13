@@ -14,8 +14,7 @@ const production = process.env.NODE_ENV === "production";
 const extensions = ['.ts', '.tsx', '.js', '.json'];
 const externals = [
 	...Object.keys(pkg.peerDependencies),
-	// We want to include the json from "cldr-localenames-full" in the bundle.
-	...Object.keys(pkg.dependencies).filter(dep => dep !== "cldr-localenames-full"),
+	...Object.keys(pkg.dependencies),
 ];
 
 export default {
