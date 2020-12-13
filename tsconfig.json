@@ -9,7 +9,8 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "jsx": "preserve",
-    "declaration": true
+    "declaration": true,
+    "importHelpers": true
   },
   "include": [
     "src/**/*"
