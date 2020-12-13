@@ -37,6 +37,7 @@
     "@rollup/plugin-node-resolve": "^11.0.0",
     "@types/react-window": "^1.8.2",
     "babel-loader": "^8.2.2",
+    "cldr-localenames-full": "^38.0.0",
     "cssnano": "^4.1.10",
     "postcss": "^8.2.0",
     "postcss-assets": "^5.0.0",
@@ -57,7 +58,6 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.12.5",
-    "cldr-localenames-full": "^38.0.0",
     "libphonenumber-js": "^1.9.6",
     "react-window": "^1.8.6"
   }
