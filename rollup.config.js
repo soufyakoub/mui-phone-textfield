@@ -36,7 +36,7 @@ export default {
 		resolve({ extensions }),
 		typescript(),
 		json(),
-		babel({ extensions, babelHelpers: "bundled", exclude: /node_modules/ }),
+		babel({ extensions, babelHelpers: "runtime", exclude: /node_modules/ }),
 		commonjs(),
 		postcss({ plugins: [postcss_assets(), production && cssnano()] }),
 		production && terser()
