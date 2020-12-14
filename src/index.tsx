@@ -1,27 +1,71 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import TextField, { TextFieldProps } from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
-import CountriesMenu, {CountriesMenuProps} from "./CountriesMenu";
-import { CountryCode } from "libphonenumber-js";
+import CountriesMenu, { CountriesMenuProps } from "./CountriesMenu";
+import { CountryCode, AsYouType, CountryCallingCode, PhoneNumber } from "libphonenumber-js";
 
 export type PhoneTextFieldProps = TextFieldProps & {
 	territoryDisplayNames?: CountriesMenuProps["territoryDisplayNames"],
+	onCountryChange?: (country: CountryCode, callingCode: CountryCallingCode) => void,
+	onChange?: (phoneNumber?: PhoneNumber) => void
 };
 
 export default function PhoneTextField(props: PhoneTextFieldProps) {
 	const [currentCountry, setCurrentCountry] = useState<CountryCode>("MA");
+	const [value, setValue] = useState("");
 
 	const {
 		territoryDisplayNames,
+		onCountryChange,
+		onChange,
+		error,
 		...rest
 	} = props;
 
-	const handleMenuItemClick: CountriesMenuProps["onItemClick"] = ({countryCode})=>{
+	const updateValue = (newValue: string, defaultCountry: CountryCode) => {
+		const formatter = new AsYouType(defaultCountry);
+		const formattedValue = formatter.input(newValue);
+		const phoneNumber = formatter.getNumber();
+
+		setValue(formattedValue);
+
+		// Return the phoneNumber instance only when the number is valid for the selected country.
+		if (phoneNumber &&
+			phoneNumber.country === defaultCountry &&
+			phoneNumber.isValid()
+		) {
+			return phoneNumber;
+		}
+	};
+
+	const handleMenuItemClick: CountriesMenuProps["onItemClick"] = ({ countryCode, callingCode }) => {
 		setCurrentCountry(countryCode);
-	}
+		const phoneNumber = updateValue(value, countryCode);
+
+		if (onCountryChange) {
+			onCountryChange(countryCode, callingCode);
+		}
+
+		if (onChange) {
+			onChange(phoneNumber);
+		}
+	};
+
+	const _onChange: TextFieldProps["onChange"] = event => {
+		const phoneNumber = updateValue(event.target.value, currentCountry);
+
+		if (onChange) {
+			onChange(phoneNumber);
+		}
+	};
 
 	return <TextField
 		{...rest}
+		select={false}
+		type="tel"
+		value={value}
+		error={Boolean(value && error)}
+		onChange={_onChange}
 		InputProps={{
 			startAdornment: (
 				<InputAdornment position="start">
