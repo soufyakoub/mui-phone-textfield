@@ -24,7 +24,14 @@ const useStyles = makeStyles(() => ({
 	}
 }));
 
-const menuData = getCountries().map(countryCode => ({ countryCode, callingCode: getCountryCallingCode(countryCode) }));
+const defaultTerritoryDisplayNames = territoriesJson.main.en.localeDisplayNames.territories;
+const menuData = getCountries()
+	.map(countryCode => ({
+		countryCode,
+		callingCode: getCountryCallingCode(countryCode),
+		countryName: defaultTerritoryDisplayNames[countryCode]
+	}))
+	.sort((a, b) => a.countryName.localeCompare(b.countryName));
 
 export interface CountriesMenuProps {
 	currrentCountry: CountryCode,
@@ -33,7 +40,6 @@ export interface CountriesMenuProps {
 }
 
 export default function CountriesMenu({ currrentCountry, territoryDisplayNames, onItemClick }: CountriesMenuProps) {
-	const territories = { ...territoriesJson.main.en.localeDisplayNames.territories, ...territoryDisplayNames };
 	const ITEM_SIZE = 45;
 	const MENU_WIDTH = 300;
 	// specZ: The maximum height of a simple menu should be one or more rows less than the view
@@ -102,7 +108,7 @@ export default function CountriesMenu({ currrentCountry, territoryDisplayNames, 
 							<Flag countryCode={menuData[index].countryCode} className={classes.flag_border} />
 						</ListItemIcon>
 						<ListItemText
-							primary={territories[menuData[index].countryCode]}
+							primary={territoryDisplayNames?.[menuData[index].countryCode] || menuData[index].countryName}
 							secondary={"+" + menuData[index].callingCode} />
 					</ListItem>}
 
