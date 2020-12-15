@@ -7,10 +7,9 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "examples:serve": "NODE_ENV=development rollup -cw & webpack serve -c examples/webpack.config.js",
-    "examples": "NODE_ENV=production rollup -c && webpack -c examples/webpack.config.js",
-    "build": "NODE_ENV=production rollup -c",
-    "watch": "NODE_ENV=development rollup -cw"
+    "start": "NODE_ENV=development rollup -cw & webpack serve -c examples/webpack.config.js",
+    "dev": "NODE_ENV=development rollup -c && webpack -c examples/webpack.config.js",
+    "build": "NODE_ENV=production rollup -c && webpack -c examples/webpack.config.js"
   },
   "repository": {
     "type": "git",
