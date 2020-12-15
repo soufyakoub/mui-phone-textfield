@@ -1,11 +1,9 @@
 import resolve from '@rollup/plugin-node-resolve';
-import babel from '@rollup/plugin-babel';
-import commonjs from '@rollup/plugin-commonjs';
 import postcss from 'rollup-plugin-postcss';
 import postcss_assets from "postcss-assets";
 import cssnano from "cssnano";
 import json from "@rollup/plugin-json";
-import typescript from 'rollup-plugin-typescript2';
+import ts from "@wessberg/rollup-plugin-ts";
 import { terser } from "rollup-plugin-terser";
 import path from "path";
 import pkg from "./package.json";
@@ -35,11 +33,13 @@ export default {
 	external: id => new RegExp(externals.join("|")).test(id),
 	plugins: [
 		resolve({ extensions }),
-		typescript(),
-		json(),
-		babel({ extensions, babelHelpers: "runtime", exclude: /node_modules/ }),
-		commonjs(),
 		postcss({ plugins: [postcss_assets(), production && cssnano()] }),
-		production && terser()
+		json(),
+		ts({
+			transpiler: "babel",
+			exclude: "node_modules/**/*",
+			tsconfig: resolvedConfig => ({ ...resolvedConfig, declaration: production }),
+		}),
+		production && terser(),
 	],
 };
