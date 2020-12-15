@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import TextField, { TextFieldProps } from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import CountriesMenu, { CountriesMenuProps } from "./CountriesMenu";
@@ -13,6 +13,10 @@ export type PhoneTextFieldProps = TextFieldProps & {
 export default function PhoneTextField(props: PhoneTextFieldProps) {
 	const [currentCountry, setCurrentCountry] = useState<CountryCode>("MA");
 	const [value, setValue] = useState("");
+
+	// This ref is used to get the current value inside a memoized handler.
+	const valueRef = useRef("");
+	valueRef.current = value;
 
 	const {
 		territoryDisplayNames,
@@ -40,7 +44,7 @@ export default function PhoneTextField(props: PhoneTextFieldProps) {
 
 	const handleMenuItemClick: CountriesMenuProps["onItemClick"] = ({ countryCode, callingCode }) => {
 		setCurrentCountry(countryCode);
-		const phoneNumber = updateValue(value, countryCode);
+		const phoneNumber = updateValue(valueRef.current, countryCode);
 
 		if (onCountryChange) {
 			onCountryChange(countryCode, callingCode);
@@ -59,6 +63,21 @@ export default function PhoneTextField(props: PhoneTextFieldProps) {
 		}
 	};
 
+	// It seems that InputAdornment and its children get re-rendered unnecessarily
+	// even if their props are not changing.
+	// So I decided to memoize the result,
+	// and use a ref in the handleMenuItemClick function to get the current value.
+	const startAdornment = useMemo(() =>
+		<InputAdornment position="start">
+			<CountriesMenu
+				currrentCountry={currentCountry}
+				territoryDisplayNames={territoryDisplayNames}
+				onItemClick={handleMenuItemClick}
+			/>
+		</InputAdornment>,
+		[currentCountry, territoryDisplayNames]
+	);
+
 	return <TextField
 		{...rest}
 		select={false}
@@ -67,15 +86,7 @@ export default function PhoneTextField(props: PhoneTextFieldProps) {
 		error={Boolean(value && error)}
 		onChange={_onChange}
 		InputProps={{
-			startAdornment: (
-				<InputAdornment position="start">
-					<CountriesMenu
-						currrentCountry={currentCountry}
-						territoryDisplayNames={territoryDisplayNames}
-						onItemClick={handleMenuItemClick}
-					/>
-				</InputAdornment>
-			),
+			startAdornment,
 		}}
 	/>;
 }
