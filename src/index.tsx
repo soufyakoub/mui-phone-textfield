@@ -23,6 +23,7 @@ export default function PhoneTextField(props: PhoneTextFieldProps) {
 		onCountryChange,
 		onChange,
 		error,
+		InputProps,
 		...rest
 	} = props;
 
@@ -86,6 +87,7 @@ export default function PhoneTextField(props: PhoneTextFieldProps) {
 		error={Boolean(value && error)}
 		onChange={_onChange}
 		InputProps={{
+			...InputProps,
 			startAdornment,
 		}}
 	/>;
