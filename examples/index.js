@@ -16,7 +16,12 @@ function Example(props) {
 	const [phoneNumber, setPhoneNumber] = useState();
 
 	return <>
-		<PhoneInput {...props} label="Phone number" error={!phoneNumber} onChange={setPhoneNumber} />
+		<PhoneInput
+			{...props}
+			label="Phone number"
+			error={!phoneNumber}
+			initialCountry="US"
+			onChange={setPhoneNumber} />
 		<br /><br />
 		<div>International: {phoneNumber?.format("INTERNATIONAL")}</div>
 		<div>National: {phoneNumber?.format("NATIONAL")}</div>
