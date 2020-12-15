@@ -6,19 +6,14 @@ import { CountryCode, AsYouType, CountryCallingCode, PhoneNumber } from "libphon
 
 export type PhoneTextFieldProps = TextFieldProps & {
 	territoryDisplayNames?: CountriesMenuProps["territoryDisplayNames"],
+	initialCountry: CountryCode,
 	onCountryChange?: (country: CountryCode, callingCode: CountryCallingCode) => void,
 	onChange?: (phoneNumber?: PhoneNumber) => void
 };
 
 export default function PhoneTextField(props: PhoneTextFieldProps) {
-	const [currentCountry, setCurrentCountry] = useState<CountryCode>("MA");
-	const [value, setValue] = useState("");
-
-	// This ref is used to get the current value inside a memoized handler.
-	const valueRef = useRef("");
-	valueRef.current = value;
-
 	const {
+		initialCountry,
 		territoryDisplayNames,
 		onCountryChange,
 		onChange,
@@ -26,6 +21,13 @@ export default function PhoneTextField(props: PhoneTextFieldProps) {
 		InputProps,
 		...rest
 	} = props;
+
+	const [currentCountry, setCurrentCountry] = useState<CountryCode>(initialCountry);
+	const [value, setValue] = useState("");
+
+	// This ref is used to get the current value inside a memoized handler.
+	const valueRef = useRef("");
+	valueRef.current = value;
 
 	const updateValue = (newValue: string, defaultCountry: CountryCode) => {
 		const formatter = new AsYouType(defaultCountry);
