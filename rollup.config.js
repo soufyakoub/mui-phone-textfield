@@ -20,14 +20,16 @@ const externals = [
 export default {
 	input: path.join(__dirname, "src", 'index.tsx'),
 	output: [
-		{
+		production && {
 			file: pkg.main,
 			format: 'cjs',
-			exports: "named"
+			exports: "named",
+			sourcemap: true,
 		},
 		{
 			file: pkg.module,
 			format: 'esm',
+			sourcemap: true,
 		}
 	],
 	external: id => new RegExp(externals.join("|")).test(id),
