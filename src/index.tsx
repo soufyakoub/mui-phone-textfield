@@ -5,16 +5,24 @@ import CountriesMenu, { CountriesMenuProps } from "./CountriesMenu";
 import { CountryCode, AsYouType, CountryCallingCode, PhoneNumber } from "libphonenumber-js";
 
 export type PhoneTextFieldProps = TextFieldProps & {
-	territoryDisplayNames?: CountriesMenuProps["territoryDisplayNames"],
+	/** A map of names to be displayed in the menu for each country code. */
+	countryDisplayNames?: CountriesMenuProps["countryDisplayNames"],
+	/** The country that will be selected on first render. */
 	initialCountry: CountryCode,
+	/** Callback fired when the selected country changes. */
 	onCountryChange?: (country: CountryCode, callingCode: CountryCallingCode) => void,
+	/** 
+	 * Callback fired when the input value changes.
+	 * @param phoneNumber - A `PhoneNumber` instance if the input value is a valid phone number,
+	 * `undefined` otherwise.
+	 */
 	onChange?: (phoneNumber?: PhoneNumber) => void
 };
 
 export default function PhoneTextField(props: PhoneTextFieldProps) {
 	const {
 		initialCountry,
-		territoryDisplayNames,
+		countryDisplayNames,
 		onCountryChange,
 		onChange,
 		error,
@@ -73,12 +81,12 @@ export default function PhoneTextField(props: PhoneTextFieldProps) {
 	const startAdornment = useMemo(() =>
 		<InputAdornment position="start">
 			<CountriesMenu
-				currrentCountry={currentCountry}
-				territoryDisplayNames={territoryDisplayNames}
+				selectedCountry={currentCountry}
+				countryDisplayNames={countryDisplayNames}
 				onItemClick={handleMenuItemClick}
 			/>
 		</InputAdornment>,
-		[currentCountry, territoryDisplayNames]
+		[currentCountry, countryDisplayNames]
 	);
 
 	return <TextField
