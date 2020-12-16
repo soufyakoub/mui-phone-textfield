@@ -34,12 +34,15 @@ const menuData = getCountries()
 	.sort((a, b) => a.countryName.localeCompare(b.countryName));
 
 export interface CountriesMenuProps {
-	currrentCountry: CountryCode,
-	territoryDisplayNames?: Record<CountryCode, string>,
+	/** The selected country. */
+	selectedCountry: CountryCode,
+	/** A map of names to be displayed in the menu for each country code. */
+	countryDisplayNames?: Record<CountryCode, string>,
+	/** Callback fired when an item from the menu is clicked. */
 	onItemClick: (data: { countryCode: CountryCode, callingCode: CountryCallingCode }) => void
 }
 
-export default function CountriesMenu({ currrentCountry, territoryDisplayNames, onItemClick }: CountriesMenuProps) {
+export default function CountriesMenu({ selectedCountry, countryDisplayNames, onItemClick }: CountriesMenuProps) {
 	const ITEM_SIZE = 45;
 	const MENU_WIDTH = 300;
 	// specZ: The maximum height of a simple menu should be one or more rows less than the view
@@ -73,7 +76,7 @@ export default function CountriesMenu({ currrentCountry, territoryDisplayNames, 
 				aria-haspopup="true"
 				onClick={handleClick}
 				className={classes.flag_button}>
-				<Flag countryCode={currrentCountry} className={classes.flag_border} />
+				<Flag countryCode={selectedCountry} className={classes.flag_border} />
 				<ArrowDropDownIcon />
 			</Button>
 
@@ -101,14 +104,14 @@ export default function CountriesMenu({ currrentCountry, territoryDisplayNames, 
 						onClick={handleMenuItemClick}
 						data-country-code={menuData[index].countryCode}
 						data-calling-code={menuData[index].callingCode}
-						selected={menuData[index].countryCode === currrentCountry}
+						selected={menuData[index].countryCode === selectedCountry}
 						button
 						dense>
 						<ListItemIcon>
 							<Flag countryCode={menuData[index].countryCode} className={classes.flag_border} />
 						</ListItemIcon>
 						<ListItemText
-							primary={territoryDisplayNames?.[menuData[index].countryCode] || menuData[index].countryName}
+							primary={countryDisplayNames?.[menuData[index].countryCode] || menuData[index].countryName}
 							secondary={"+" + menuData[index].callingCode} />
 					</ListItem>}
 
