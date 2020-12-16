@@ -1,12 +1,13 @@
 import React, { useMemo, useRef, useState } from "react";
+import PropTypes from 'prop-types';
 import TextField, { TextFieldProps } from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import CountriesMenu, { CountriesMenuProps } from "./CountriesMenu";
-import { CountryCode, AsYouType, CountryCallingCode, PhoneNumber } from "libphonenumber-js";
+import { CountryCode, AsYouType, CountryCallingCode, PhoneNumber, getCountries } from "libphonenumber-js";
 
 export type PhoneTextFieldProps = TextFieldProps & {
 	/** A map of names to be displayed in the menu for each country code. */
-	countryDisplayNames?: CountriesMenuProps["countryDisplayNames"],
+	countryDisplayNames?: Record<CountryCode, string>,
 	/** The country that will be selected on first render. */
 	initialCountry: CountryCode,
 	/** Callback fired when the selected country changes. */
@@ -19,7 +20,7 @@ export type PhoneTextFieldProps = TextFieldProps & {
 	onChange?: (phoneNumber?: PhoneNumber) => void
 };
 
-export default function PhoneTextField(props: PhoneTextFieldProps) {
+function PhoneTextField(props: PhoneTextFieldProps) {
 	const {
 		initialCountry,
 		countryDisplayNames,
@@ -102,3 +103,23 @@ export default function PhoneTextField(props: PhoneTextFieldProps) {
 		}}
 	/>;
 }
+
+const countryCodes = getCountries();
+const countryDisplayNamesShape = countryCodes.reduce((obj, countryCode) => {
+	obj[countryCode] = PropTypes.string;
+	return obj;
+}, {} as Record<CountryCode, typeof PropTypes.string>);
+
+// If a prop is used inside PhoneTextField
+// instead of passing it directly to TextField,
+// its corresponding propType should be specified.
+PhoneTextField.propTypes = {
+	countryDisplayNames: PropTypes.shape(countryDisplayNamesShape),
+	initialCountry: PropTypes.oneOf(countryCodes).isRequired,
+	onCountryChange: PropTypes.func,
+	onChange: PropTypes.func,
+	error: PropTypes.bool,
+	InputProps: PropTypes.object,
+}
+
+export default PhoneTextField;
