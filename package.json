@@ -1,5 +1,5 @@
 {
-  "name": "mui-phone-number-input",
+  "name": "mui-phone-textfield",
   "version": "0.0.0",
   "description": "A phone number input for Material-UI.",
   "main": "dist/cjs/bundle.js",
@@ -18,7 +18,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/soufyakoub/mui-phone-number-input.git"
+    "url": "git+https://github.com/soufyakoub/mui-phone-textfield.git"
   },
   "author": {
     "name": "Soufiane Yakoubi",
@@ -26,9 +26,9 @@
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/soufyakoub/mui-phone-number-input/issues"
+    "url": "https://github.com/soufyakoub/mui-phone-textfield/issues"
   },
-  "homepage": "https://github.com/soufyakoub/mui-phone-number-input#readme",
+  "homepage": "https://github.com/soufyakoub/mui-phone-textfield#readme",
   "devDependencies": {
     "@babel/core": "^7.12.9",
     "@babel/plugin-transform-runtime": "^7.12.10",
