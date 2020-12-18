@@ -31,6 +31,7 @@ jobs:
               branch: main
         - provider: pages
           skip_cleanup: true
+          local_dir: examples/public
           github_token: $GITHUB_TOKEN
           keep_history: true
           committer_from_gh: true
