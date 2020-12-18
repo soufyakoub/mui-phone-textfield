@@ -2,7 +2,7 @@ os: linux
 language: node_js
 
 node_js:
-	- lts/*
+  - lts/*
 
 addons:
   apt:
@@ -10,24 +10,22 @@ addons:
     - python3
 
 install:
-	- python3 -m pip install pipenv
-	- pipenv install
-	- npm install
+  - python3 -m pip install pipenv
+  - pipenv install
+  - npm install
 
 jobs:
   include:
     - stage: "deploy"
       script: python sprite.py && npm run build
-			on:
-        branch: main
       deploy:
         - provider: script
-					skip_cleanup: true
-					script: npx semantic-release
-				- provider: pages
-					skip_cleanup: true
-					github_token: $GITHUB_TOKEN
-					keep_history: true
-					committer_from_gh: true
-					verbose: true
-					project_name: mui-phone-textfield
+          cleanup: false
+          script: npx semantic-release
+        - provider: pages
+          cleanup: false
+          token: $GITHUB_TOKEN
+          keep_history: true
+          committer_from_gh: true
+          verbose: true
+          project_name: mui-phone-textfield
