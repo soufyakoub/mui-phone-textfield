@@ -4,24 +4,31 @@ language: node_js
 node_js:
   - lts/*
 
-addons:
-  apt:
-    packages:
-    - python3
+# upgrade pyenv
+before_install:
+  - cd $(pyenv root)
+  - git pull origin master
+  - cd -
 
 install:
-  - python3 -m pip install pipenv
+  - pyenv install 3.8.6
+  - pyenv global 3.8.6
+  - pip install pipenv
   - pipenv install
   - npm install
 
 jobs:
   include:
     - stage: "deploy"
-      script: python sprite.py && npm run build
+      script:
+        - pipenv run sprite.py
+        - npm run build
       deploy:
         - provider: script
           cleanup: false
           script: npx semantic-release
+          on:
+              branch: main
         - provider: pages
           cleanup: false
           token: $GITHUB_TOKEN
@@ -29,3 +36,5 @@ jobs:
           committer_from_gh: true
           verbose: true
           project_name: mui-phone-textfield
+          on:
+              branch: main
