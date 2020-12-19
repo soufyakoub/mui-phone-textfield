@@ -10,9 +10,9 @@
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "NODE_ENV=development rollup -cw & webpack serve -c examples/webpack.config.js",
-    "dev": "NODE_ENV=development rollup -c && webpack -c examples/webpack.config.js",
-    "build": "NODE_ENV=production rollup -c && webpack -c examples/webpack.config.js"
+    "start": "concurrently -k 'rollup -cw --environment NODE_ENV:development' 'webpack serve --env NODE_ENV=development -c examples/webpack.config.js'",
+    "dev": "rollup -c --environment NODE_ENV:development && webpack --env NODE_ENV=development -c examples/webpack.config.js",
+    "build": "rollup -c --environment NODE_ENV:production && webpack --env NODE_ENV=production -c examples/webpack.config.js"
   },
   "husky": {
     "hooks": {
@@ -71,6 +71,7 @@
     "@wessberg/rollup-plugin-ts": "^1.3.8",
     "babel-loader": "^8.2.2",
     "cldr-localenames-full": "^38.0.0",
+    "concurrently": "^5.3.0",
     "cssnano": "^4.1.10",
     "husky": "^4.3.6",
     "postcss": "^8.2.0",
