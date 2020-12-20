@@ -29,7 +29,12 @@ flag_positions = []
 sprite = Image.new("RGBA", sprite_size)
 
 # This default flag will be used if a certain country code does not have a corresponding flag in the sprite.
-flag_paths.remove("flags/default.png")
+try:
+	# On Linux
+	flag_paths.remove("flags/default.png")
+except ValueError:
+	# On Windows
+	flag_paths.remove("flags\\default.png")
 sprite.paste(Image.open("flags/default.png"), (0, 0))
 
 # Filling columns from top to bottom, and from left to right.
