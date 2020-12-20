@@ -1,4 +1,4 @@
-import React, { useState, MouseEvent } from 'react';
+import React, { useState, MouseEvent, memo } from 'react';
 import Button from '@material-ui/core/Button';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -42,7 +42,7 @@ export interface CountriesMenuProps {
 	onItemClick: (data: { countryCode: CountryCode, callingCode: CountryCallingCode }) => void
 }
 
-export default function CountriesMenu({ selectedCountry, countryDisplayNames, onItemClick }: CountriesMenuProps) {
+function CountriesMenu({ selectedCountry, countryDisplayNames, onItemClick }: CountriesMenuProps) {
 	const ITEM_SIZE = 45;
 	const MENU_WIDTH = 300;
 	// specZ: The maximum height of a simple menu should be one or more rows less than the view
@@ -120,3 +120,5 @@ export default function CountriesMenu({ selectedCountry, countryDisplayNames, on
 		</>
 	);
 }
+
+export default memo(CountriesMenu);
