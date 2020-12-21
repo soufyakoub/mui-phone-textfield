@@ -1,23 +1,44 @@
-import React, { Component } from "react";
+import React, { ChangeEvent, Component } from "react";
 import PropTypes from 'prop-types';
 import TextField, { TextFieldProps } from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import CountriesMenu, { CountriesMenuProps } from "./CountriesMenu";
-import { CountryCode, AsYouType, CountryCallingCode, PhoneNumber, getCountries } from "libphonenumber-js";
+import { CountryCode, AsYouType, PhoneNumber, getCountries } from "libphonenumber-js";
+import merge from "lodash/merge";
 
-export type PhoneTextFieldProps = TextFieldProps & {
+interface PhoneNumberChangeEvent<T = Element> extends ChangeEvent<T> {
+	/**
+	 * An instance of the `PhoneNumber` class,
+	 * or `undefined` if no valid phone number for the selected country could be parsed from the input's value.
+	 */
+	phoneNumber?: PhoneNumber,
+	currentTarget: EventTarget & T & {
+		/** The formatted input value for the selected country. */
+		formattedValue: string,
+	}
+};
+
+type OnCountrySelectData = {
+	/** The selected country. */
+	country: CountryCode,
+	/** The formatted input value for the selected country. */
+	formattedValue?: string,
+	/**
+	 * An instance of the `PhoneNumber` class,
+	 * or `undefined` if no valid phone number for the selected country could be parsed from the input's value.
+	 */
+	phoneNumber?: PhoneNumber,
+}
+
+export type PhoneTextFieldProps = Omit<TextFieldProps, "onChange"> & {
 	/** A map of names to be displayed in the menu for each country code. */
 	countryDisplayNames?: CountriesMenuProps["countryDisplayNames"],
-	/** The country that will be selected on first render. */
-	initialCountry: CountryCode,
-	/** Callback fired when the selected country changes. */
-	onCountryChange?: (country: CountryCode, callingCode: CountryCallingCode) => void,
-	/**
-	 * Callback fired when the input value changes.
-	 * @param phoneNumber - A `PhoneNumber` instance if the input value is a valid phone number,
-	 * `undefined` otherwise.
-	 */
-	onChange?: (phoneNumber?: PhoneNumber) => void
+	/** The currently selected country. */
+	country: CountryCode,
+	/** Callback fired when a country is selected from the menu. */
+	onCountrySelect?: (data: OnCountrySelectData) => void,
+	/** Callback fired when the input value changes. */
+	onChange?: (event: PhoneNumberChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void,
 };
 
 const countryCodes = getCountries();
@@ -26,67 +47,71 @@ const countryDisplayNamesShape = countryCodes.reduce((obj, countryCode) => {
 	return obj;
 }, {} as Record<CountryCode, typeof PropTypes.string>);
 
-class PhoneTextField extends Component<PhoneTextFieldProps, { currentCountry: CountryCode, value: string }> {
-
-	constructor(props: PhoneTextFieldProps) {
-		super(props)
-
-		this.state = {
-			currentCountry: props.initialCountry,
-			value: "",
-		}
-	}
-
+class PhoneTextField extends Component<PhoneTextFieldProps> {
 	// If a prop is used inside PhoneTextField
 	// instead of passing it directly to TextField,
 	// its corresponding propType should be specified.
 	static propTypes = {
 		countryDisplayNames: PropTypes.shape(countryDisplayNamesShape),
-		initialCountry: PropTypes.oneOf(countryCodes).isRequired,
-		onCountryChange: PropTypes.func,
+		country: PropTypes.oneOf(countryCodes).isRequired,
+		onCountrySelect: PropTypes.func,
 		onChange: PropTypes.func,
-		error: PropTypes.bool,
 		InputProps: PropTypes.object,
 	}
 
-	updateValue = (newValue: string, defaultCountry: CountryCode) => {
-		const formatter = new AsYouType(defaultCountry);
-		const formattedValue = formatter.input(newValue);
-		const phoneNumber = formatter.getNumber();
-
-		this.setState({ value: formattedValue });
-
-		// Return the phoneNumber instance only when the number is valid for the selected country.
-		if (phoneNumber &&
-			phoneNumber.country === defaultCountry &&
-			phoneNumber.isValid()
-		) {
-			return phoneNumber;
+	handleMenuItemClick: CountriesMenuProps["onItemClick"] = ({ countryCode: newCountry }) => {
+		if (typeof this.props.onCountrySelect !== "function") {
+			return;
 		}
-	};
 
-	handleMenuItemClick: CountriesMenuProps["onItemClick"] = ({ countryCode, callingCode }) => {
-		this.setState({ currentCountry: countryCode });
-		const phoneNumber = this.updateValue(this.state.value, countryCode);
+		const data: OnCountrySelectData = {
+			country: newCountry,
+		};
 
-		this.props.onCountryChange?.(countryCode, callingCode);
+		if (typeof this.props.value === "string") {
+			const formatter = new AsYouType(newCountry);
+			const formattedValue = formatter.input(this.props.value);
+			const phoneNumber = formatter.getNumber();
 
-		this.props.onChange?.(phoneNumber);
+			data.formattedValue = formattedValue;
+
+			if (phoneNumber && phoneNumber.isValid()) {
+				data.phoneNumber = phoneNumber;
+			}
+		}
+
+		this.props.onCountrySelect(data);
 	};
 
 	_onChange: TextFieldProps["onChange"] = event => {
-		const phoneNumber = this.updateValue(event.target.value, this.state.currentCountry);
+		if (typeof this.props.onChange !== "function") {
+			return;
+		}
 
-		this.props.onChange?.(phoneNumber);
+		const formatter = new AsYouType(this.props.country);
+		const formattedValue = formatter.input(event.target.value);
+		const phoneNumber = formatter.getNumber();
+
+		const additionalProps = {
+			currentTarget: {
+				formattedValue,
+			},
+			phoneNumber: phoneNumber?.isValid() ? phoneNumber : undefined,
+		};
+
+		const extendedChangeEvent = merge(event, additionalProps);
+
+		this.props.onChange(extendedChangeEvent);
 	};
 
 	render() {
 		const {
-			initialCountry,
-			countryDisplayNames,
-			onCountryChange,
+			// Unused props to keep out from `rest`
+			onCountrySelect,
 			onChange,
-			error,
+			// ------------
+			countryDisplayNames,
+			country,
 			InputProps,
 			...rest
 		} = this.props;
@@ -95,17 +120,15 @@ class PhoneTextField extends Component<PhoneTextFieldProps, { currentCountry: Co
 			{...rest}
 			select={false}
 			type="tel"
-			value={this.state.value}
-			error={Boolean(this.state.value && error)}
 			onChange={this._onChange}
 			InputProps={{
 				...InputProps,
-				// It seems CountriesMenu is rerendered on every value change,
+				// It seems CountriesMenu is rerendered on every value change (performance bottleneck),
 				// that's why PhoneTextField is a class component, since the reference to this.handleMenuItemClick
-				// does not change, which prevents rerendering the memoized CountriesMenu component.
+				// does not change, which prevents unnecessary rerenders of the memoized CountriesMenu component.
 				startAdornment: <InputAdornment position="start">
 					<CountriesMenu
-						selectedCountry={this.state.currentCountry}
+						selectedCountry={country}
 						countryDisplayNames={countryDisplayNames}
 						onItemClick={this.handleMenuItemClick}
 					/>
