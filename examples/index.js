@@ -9,24 +9,40 @@ const input_props = [
 	{ size: "medium", variant: "standard" },
 	{ size: "small", variant: "outlined" },
 	{ size: "small", variant: "filled" },
-	{ size: "small", variant: "standard" }
+	{ size: "small", variant: "standard" },
 ];
 
 function Example(props) {
+	const [value, setValue] = useState("");
+	const [country, setCountry] = useState("MA");
 	const [phoneNumber, setPhoneNumber] = useState();
+
+	const onChange = (event) => {
+		setValue(event.currentTarget.formattedValue);
+		setPhoneNumber(event.phoneNumber);
+	};
+
+	const onCountrySelect = ({ country, formattedValue, phoneNumber }) => {
+		setValue(formattedValue);
+		setCountry(country);
+		setPhoneNumber(phoneNumber);
+	};
 
 	return <>
 		<PhoneInput
 			{...props}
 			label="Phone number"
-			error={!phoneNumber}
-			initialCountry="US"
-			onChange={setPhoneNumber} />
+			error={Boolean(value && phoneNumber?.country !== country)}
+			value={value}
+			country={country}
+			onCountrySelect={onCountrySelect}
+			onChange={onChange} />
 		<br /><br />
 		<div>International: {phoneNumber?.format("INTERNATIONAL")}</div>
 		<div>National: {phoneNumber?.format("NATIONAL")}</div>
 		<div>E.164: {phoneNumber?.format("E.164")}</div>
 		<div>Country: {phoneNumber?.country}</div>
+		<div>Calling code: {phoneNumber?.countryCallingCode}</div>
 	</>;
 }
 
