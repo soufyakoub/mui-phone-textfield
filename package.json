@@ -10,7 +10,9 @@
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "concurrently -k 'rollup -cw --environment NODE_ENV:development' 'webpack serve --env NODE_ENV=development -c examples/webpack.config.js'",
+    "start": "concurrently -k npm:start:*",
+    "start:dist": "rollup -cw --environment NODE_ENV:development",
+    "start:examples": "webpack serve --env NODE_ENV=development -c examples/webpack.config.js",
     "dev": "rollup -c --environment NODE_ENV:development && webpack --env NODE_ENV=development -c examples/webpack.config.js",
     "build": "rollup -c --environment NODE_ENV:production && webpack --env NODE_ENV=production -c examples/webpack.config.js"
   },
