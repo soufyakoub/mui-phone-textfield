@@ -46,6 +46,14 @@
     "type": "git",
     "url": "git+https://github.com/soufyakoub/mui-phone-textfield.git"
   },
+  "keywords": [
+    "phone",
+    "input",
+    "material-ui",
+    "react",
+    "material design",
+    "react-component"
+  ],
   "author": {
     "name": "Soufiane Yakoubi",
     "email": "splentercell.1997@gmail.com"
