@@ -44,7 +44,7 @@ function Example() {
 	};
 
 	return <PhoneTextField
-        label="Phone number"
+		label="Phone number"
 		error={Boolean(value && phoneNumber?.country !== country)}
 		value={value}
 		country={country}
@@ -73,8 +73,8 @@ In addtion to [TextField](https://material-ui.com/api/text-field/#props)'s props
 The `onChange` and `onCountrySelect` are the most important part of this component:
 
 - `onChange`: callback fired when the input value changes. It receives a react synthetic event with two additional properties:
-    - `currentTarget.formattedValue`: the formatted input value for the selected country.
-    - `phoneNumber`: an instance of the [PhoneNumber](https://github.com/catamphetamine/libphonenumber-js/blob/master/README.md#phonenumber) class, or `undefined` if no valid phone number for the selected country could be parsed from the input's value.
+	- `currentTarget.formattedValue`: the formatted input value for the selected country.
+	- `phoneNumber`: an instance of the [PhoneNumber](https://github.com/catamphetamine/libphonenumber-js/blob/master/README.md#phonenumber) class, or `undefined` if no valid phone number for the selected country could be parsed from the input's value.
 
 - `onCountrySelect`: callback fired when a country is selected from the menu. It receives an object with the following properties:
 	- `country`: the selected country. [A two-letter ISO country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements).

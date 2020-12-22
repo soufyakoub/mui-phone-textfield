@@ -8,6 +8,9 @@ trim_trailing_whitespace = true
 [*.{js,py}]
 indent_style = tab
 
+[README.md]
+indent_style = tab
+
 [*.yml]
 indent_style = space
 indent_size = 2
