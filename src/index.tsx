@@ -34,7 +34,7 @@ export type PhoneTextFieldProps = Omit<TextFieldProps, "onChange"> & {
 	/** A map of names to be displayed in the menu for each country code. */
 	countryDisplayNames?: CountriesMenuProps["countryDisplayNames"],
 	/** The currently selected country. */
-	country: CountryCode,
+	country?: CountryCode,
 	/** Callback fired when a country is selected from the menu. */
 	onCountrySelect?: (data: OnCountrySelectData) => void,
 	/** Callback fired when the input value changes. */
@@ -53,7 +53,7 @@ class PhoneTextField extends Component<PhoneTextFieldProps> {
 	// its corresponding propType should be specified.
 	static propTypes = {
 		countryDisplayNames: PropTypes.shape(countryDisplayNamesShape),
-		country: PropTypes.oneOf(countryCodes).isRequired,
+		country: PropTypes.oneOf(countryCodes),
 		onCountrySelect: PropTypes.func,
 		onChange: PropTypes.func,
 		InputProps: PropTypes.object,
