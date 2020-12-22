@@ -1,7 +1,7 @@
 const path = require('path');
 
-module.exports = {
-	mode: process.env.NODE_ENV === "production" ? "production" : "development",
+module.exports = env => ({
+	mode: env.NODE_ENV === "production" ? "production" : "development",
 	entry: path.resolve(__dirname, "index.js"),
 	output: {
 		path: path.resolve(__dirname, 'public'),
@@ -25,4 +25,4 @@ module.exports = {
 		liveReload: true,
 		open: true
 	},
-};
+});
