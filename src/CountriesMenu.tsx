@@ -35,7 +35,7 @@ const menuData = getCountries()
 
 export interface CountriesMenuProps {
 	/** The selected country. */
-	selectedCountry: CountryCode,
+	selectedCountry?: CountryCode,
 	/** A map of names to be displayed in the menu for each country code. */
 	countryDisplayNames?: Record<CountryCode, string>,
 	/** Callback fired when an item from the menu is clicked. */
