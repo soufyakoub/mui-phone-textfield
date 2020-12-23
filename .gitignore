@@ -4,3 +4,4 @@ src/sprite.png
 node_modules
 examples/public/bundle.js
 dist
+public

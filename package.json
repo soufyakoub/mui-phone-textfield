@@ -84,6 +84,7 @@
     "cldr-localenames-full": "^38.0.0",
     "concurrently": "^5.3.0",
     "cssnano": "^4.1.10",
+    "html-webpack-plugin": "^4.5.0",
     "husky": "^4.3.6",
     "postcss": "^8.2.0",
     "postcss-assets": "^5.0.0",
