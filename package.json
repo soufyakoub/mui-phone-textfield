@@ -10,11 +10,16 @@
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "concurrently -k npm:start:*",
+    "clean": "rimraf examples/public dist",
+    "start": "npm run clean && concurrently -k npm:start:*",
     "start:dist": "rollup -cw --environment NODE_ENV:development",
     "start:examples": "webpack serve --env NODE_ENV=development -c examples/webpack.config.js",
-    "dev": "rollup -c --environment NODE_ENV:development && webpack --env NODE_ENV=development -c examples/webpack.config.js",
-    "build": "rollup -c --environment NODE_ENV:production && webpack --env NODE_ENV=production -c examples/webpack.config.js"
+    "dev": "npm run clean && npm run dev:dist && npm run dev:examples",
+    "dev:dist": "rollup -c --environment NODE_ENV:development",
+    "dev:examples": "webpack --env NODE_ENV=development -c examples/webpack.config.js",
+    "build": "npm run clean && npm run build:dist && npm run build:examples",
+    "build:dist": "rollup -c --environment NODE_ENV:production",
+    "build:examples": "webpack --env NODE_ENV=production -c examples/webpack.config.js"
   },
   "husky": {
     "hooks": {
@@ -90,6 +95,7 @@
     "postcss-assets": "^5.0.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "rimraf": "^3.0.2",
     "rollup": "^2.34.2",
     "rollup-plugin-postcss": "^4.0.0",
     "rollup-plugin-terser": "^7.0.2",
