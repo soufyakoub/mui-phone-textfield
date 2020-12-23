@@ -6,6 +6,10 @@
 # mui-phone-textfield
 > A phone number input for Material-UI.
 
+![different variants of the same component](https://media.giphy.com/media/QM9ikg4lwuClWrCIZJ/giphy.gif)
+
+[Live demo](https://soufyakoub.github.io/mui-phone-textfield/)
+
 ## Installation
 
 via [npm](https://npmjs.org/)
@@ -61,7 +65,8 @@ In addtion to [TextField](https://material-ui.com/api/text-field/#props)'s props
 |-|-|-|
 | country | string | The selected country. [A two-letter ISO country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements). |
 | onCountrySelect | function | Callback fired when a user selects a country from the menu. |
-| countryDisplayNames | object | An object that maps an ISO country code to country name. can be used for localisation. |
+| countryDisplayNames | object | An object that maps an ISO country code to a country name. can be used for localisation.
+**Note**: please provide the same reference to the object when rerendering your component, or else the countries menu will rerender on each input change, which is bad for performance. |
 
 **Note**: some props are forced:
 - `select`: forced to be `false`.
