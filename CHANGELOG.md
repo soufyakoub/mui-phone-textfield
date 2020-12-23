@@ -1,3 +1,21 @@
+# [2.0.0](https://github.com/soufyakoub/mui-phone-textfield/compare/v1.0.1...v2.0.0) (2020-12-23)
+
+
+### Features
+
+* `onChange` now receives a data object instead of the change event ([3cc83d6](https://github.com/soufyakoub/mui-phone-textfield/commit/3cc83d6221fcf176023060b604453fec829069ca))
+
+
+### BREAKING CHANGES
+
+* The object passed to `onChange` has the following
+properties:
+  - `formattedValue`: The formatted value for the selected country. Extracted from the input value.
+  - `phoneNumber`: An instance of the
+[PhoneNumber](https://github.com/catamphetamine/libphonenumber-js/blob/master/README.md#phonenumber)
+class, or `undefined` if no valid phone number could be parsed from the input value.
+  - `event`: The original event that triggered the `onChange` handler.
+
 ## [1.0.1](https://github.com/soufyakoub/mui-phone-textfield/compare/v1.0.0...v1.0.1) (2020-12-23)
 
 
