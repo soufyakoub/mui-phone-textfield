@@ -6,7 +6,7 @@ module.exports = env => ({
 	entry: path.resolve(__dirname, "index.js"),
 	output: {
 		path: path.resolve(__dirname, 'public'),
-		filename: '[name].[chunkhash].js',
+		filename: '[chunkhash].js',
 		publicPath: env.NODE_ENV === "production"
 			// This is the base path in the github-pages examples website. (the name of the github repository)
 			? "/mui-phone-textfield"
@@ -34,4 +34,25 @@ module.exports = env => ({
 		liveReload: true,
 		open: true
 	},
+	optimization: {
+		runtimeChunk: 'single',
+		splitChunks: {
+			chunks: 'all',
+			maxInitialRequests: Infinity,
+			cacheGroups: {
+				vendor: {
+					test: /[\\/]node_modules[\\/]/,
+					name(module) {
+						// Get the package name.
+						// Example: node_modules/package-name/not/this/part.js
+						// or node_modules/package-name
+						const package_name = module.context.match(/[\\/]node_modules[\\/](.+?)([\\/]|$)/)[1];
+
+						// npm package names are URL-safe, but some servers don't like @ symbols.
+						return package_name.replace('@', '');
+					},
+				},
+			},
+		},
+	}
 });
