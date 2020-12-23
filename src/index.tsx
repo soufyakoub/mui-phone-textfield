@@ -1,33 +1,33 @@
-import React, { ChangeEvent, Component } from "react";
+import React, { Component } from "react";
 import PropTypes from 'prop-types';
 import TextField, { TextFieldProps } from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import CountriesMenu, { CountriesMenuProps } from "./CountriesMenu";
 import { CountryCode, AsYouType, PhoneNumber, getCountries } from "libphonenumber-js";
-import merge from "lodash/merge";
-
-interface PhoneNumberChangeEvent<T = Element> extends ChangeEvent<T> {
-	/**
-	 * An instance of the `PhoneNumber` class,
-	 * or `undefined` if no valid phone number for the selected country could be parsed from the input's value.
-	 */
-	phoneNumber?: PhoneNumber,
-	currentTarget: EventTarget & T & {
-		/** The formatted input value for the selected country. */
-		formattedValue: string,
-	}
-};
+import clone from "lodash/clone";
 
 type OnCountrySelectData = {
-	/** The selected country. */
-	country: CountryCode,
-	/** The formatted input value for the selected country. */
+	/** The formatted value for the selected country. Extracted from the `value` prop. */
 	formattedValue?: string,
 	/**
-	 * An instance of the `PhoneNumber` class,
-	 * or `undefined` if no valid phone number for the selected country could be parsed from the input's value.
+	 * An instance of the [PhoneNumber](https://github.com/catamphetamine/libphonenumber-js/blob/master/README.md#phonenumber) class,
+	 * or `undefined` if no valid phone number could be parsed from the `value` prop.
 	 */
 	phoneNumber?: PhoneNumber,
+	/** The selected country. */
+	country: CountryCode,
+}
+
+type OnChangeData = {
+	/** The formatted value for the selected country. Extracted from the input value. */
+	formattedValue: string,
+	/**
+	 * An instance of the [PhoneNumber](https://github.com/catamphetamine/libphonenumber-js/blob/master/README.md#phonenumber) class,
+	 * or `undefined` if no valid phone number could be parsed from the input value.
+	 */
+	phoneNumber?: PhoneNumber,
+	/** The original event that triggered the `onChange` handler. */
+	event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
 }
 
 export type PhoneTextFieldProps = Omit<TextFieldProps, "onChange"> & {
@@ -35,10 +35,10 @@ export type PhoneTextFieldProps = Omit<TextFieldProps, "onChange"> & {
 	countryDisplayNames?: CountriesMenuProps["countryDisplayNames"],
 	/** The currently selected country. */
 	country?: CountryCode,
-	/** Callback fired when a country is selected from the menu. */
+	/** Callback fired when a user selects a country from the menu. */
 	onCountrySelect?: (data: OnCountrySelectData) => void,
 	/** Callback fired when the input value changes. */
-	onChange?: (event: PhoneNumberChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void,
+	onChange?: (data: OnChangeData) => void,
 };
 
 const countryCodes = getCountries();
@@ -75,7 +75,7 @@ class PhoneTextField extends Component<PhoneTextFieldProps> {
 
 			data.formattedValue = formattedValue;
 
-			if (phoneNumber && phoneNumber.isValid()) {
+			if (phoneNumber?.isValid()) {
 				data.phoneNumber = phoneNumber;
 			}
 		}
@@ -92,16 +92,13 @@ class PhoneTextField extends Component<PhoneTextFieldProps> {
 		const formattedValue = formatter.input(event.target.value);
 		const phoneNumber = formatter.getNumber();
 
-		const additionalProps = {
-			currentTarget: {
-				formattedValue,
-			},
+		const data = {
+			formattedValue,
 			phoneNumber: phoneNumber?.isValid() ? phoneNumber : undefined,
+			event,
 		};
 
-		const extendedChangeEvent = merge(event, additionalProps);
-
-		this.props.onChange(extendedChangeEvent);
+		this.props.onChange(data);
 	};
 
 	render() {

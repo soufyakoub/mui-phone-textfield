@@ -12,13 +12,13 @@
 
 ## Installation
 
-via [npm](https://npmjs.org/)
+Via [npm](https://npmjs.org/)
 
 ```sh
 npm install mui-phone-textfield
 ```
 
-via [yarn](https://yarnpkg.com)
+Via [yarn](https://yarnpkg.com)
 
 ```sh
 yarn add mui-phone-textfield
@@ -36,9 +36,9 @@ function Example() {
 	const [country, setCountry] = useState("US"); // The selected country.
 	const [phoneNumber, setPhoneNumber] = useState(); // The PhoneNumber instance.
 
-	const onChange = (event) => {
-		setValue(event.currentTarget.formattedValue);
-		setPhoneNumber(event.phoneNumber);
+	const onChange = ({ formattedValue, phoneNumber }) => {
+		setValue(formattedValue);
+		setPhoneNumber(phoneNumber);
 	};
 
 	const onCountrySelect = ({ country, formattedValue, phoneNumber }) => {
@@ -65,25 +65,25 @@ In addtion to [TextField](https://material-ui.com/api/text-field/#props)'s props
 |-|-|-|
 | country | string | The selected country. [A two-letter ISO country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements). |
 | onCountrySelect | function | Callback fired when a user selects a country from the menu. |
-| countryDisplayNames | object | An object that maps an ISO country code to a country name. can be used for localisation.<br/><br/>:warning: please provide the same reference to the object when re-rendering your component, or else the countries menu will re-render on each input change, which is bad for performance. |
+| onChange | function | Callback fired when the input value changes. |
+| countryDisplayNames | object | An object that maps a [A two-letter ISO country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements) to a country name. can be used for localisation.<br/><br/>:warning: Changing the object reference on each re-render will cause a performance hit, becaue the countries menu will be re-rendered on each input value change. |
 
-**Note**: some props are forced:
-- `select`: forced to be `false`.
-- `type`: forced to be `"tel"`.
+**Note**: Some props are forced:
+- `select`: Forced to be `false`.
+- `type`: Forced to be `"tel"`.
 - The `startAdornment` key of `InputProps` is reserved for the countries menu, but all the others are left untouched.
 
 ## Event listeners
 
-The `onChange` and `onCountrySelect` are the most important part of this component:
+- `onCountrySelect`: Callback fired when a user selects a country from the menu. It receives an object with these properties:
+	- `formattedValue` {string | undefined}: The formatted value for the selected country. Extracted from the `value` prop.
+	- `phoneNumber` {object | undefined}: An instance of the [PhoneNumber](https://github.com/catamphetamine/libphonenumber-js/blob/master/README.md#phonenumber) class, or `undefined` if no valid phone number could be parsed from the `value` prop.
+	- `country` {string}: The selected country. [A two-letter ISO country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements).
 
-- `onChange`: callback fired when the input value changes. It receives a react synthetic event with two additional properties:
-	- `currentTarget.formattedValue`: the formatted input value for the selected country.
-	- `phoneNumber`: an instance of the [PhoneNumber](https://github.com/catamphetamine/libphonenumber-js/blob/master/README.md#phonenumber) class, or `undefined` if no valid phone number for the selected country could be parsed from the input's value.
-
-- `onCountrySelect`: callback fired when a country is selected from the menu. It receives an object with the following properties:
-	- `country`: the selected country. [A two-letter ISO country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements).
-	- `formattedValue`: the formatted input value for the selected country.
-	- `phoneNumber`: an instance of the [PhoneNumber](https://github.com/catamphetamine/libphonenumber-js/blob/master/README.md#phonenumber) class, or `undefined` if no valid phone number for the selected country could be parsed from the input's value.
+- `onChange`: Callback fired when the input value changes. It receives an object with these properties:
+	- `formattedValue` {string}: The formatted value for the selected country. Extracted from the input value.
+	- `phoneNumber` {object | undefined}: An instance of the [PhoneNumber](https://github.com/catamphetamine/libphonenumber-js/blob/master/README.md#phonenumber) class, or `undefined` if no valid phone number could be parsed from the input value.
+	- `event` {object}: The original event that triggered the `onChange` handler.
 
 ## Contributing
 
@@ -100,12 +100,12 @@ After cloning this repo, ensure dependencies are installed by running:
 npm install
 ```
 
-and for python dependencies:
+And for python dependencies:
 ```sh
 pipenv install
 ```
 
-generate the sprite image and stylesheet:
+Generate the sprite image and stylesheet:
 ```sh
 pipenv run python sprite.py
 ```
@@ -117,7 +117,7 @@ To run the development server run:
 npm run start
 ```
 
-this will serve the examples page to your browser and automatically reload on every change to either the example's files or the `src` files.
+This will serve the examples page to your browser and automatically reload on every change to either the example's files or the `src` files.
 
 ### Commiting the changes
 

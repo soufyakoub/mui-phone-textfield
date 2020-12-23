@@ -17,9 +17,9 @@ function Example(props) {
 	const [country, setCountry] = useState("MA");
 	const [phoneNumber, setPhoneNumber] = useState();
 
-	const onChange = (event) => {
-		setValue(event.currentTarget.formattedValue);
-		setPhoneNumber(event.phoneNumber);
+	const onChange = ({ formattedValue, phoneNumber }) => {
+		setValue(formattedValue);
+		setPhoneNumber(phoneNumber);
 	};
 
 	const onCountrySelect = ({ country, formattedValue, phoneNumber }) => {
