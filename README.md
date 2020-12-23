@@ -15,13 +15,13 @@
 via [npm](https://npmjs.org/)
 
 ```sh
-npm install libphonenumber-js --save
+npm install mui-phone-textfield
 ```
 
 via [yarn](https://yarnpkg.com)
 
 ```sh
-yarn add libphonenumber-js
+yarn add mui-phone-textfield
 ```
 
 ## Usage
@@ -65,8 +65,7 @@ In addtion to [TextField](https://material-ui.com/api/text-field/#props)'s props
 |-|-|-|
 | country | string | The selected country. [A two-letter ISO country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements). |
 | onCountrySelect | function | Callback fired when a user selects a country from the menu. |
-| countryDisplayNames | object | An object that maps an ISO country code to a country name. can be used for localisation.
-**Note**: please provide the same reference to the object when rerendering your component, or else the countries menu will rerender on each input change, which is bad for performance. |
+| countryDisplayNames | object | An object that maps an ISO country code to a country name. can be used for localisation.<br/><br/>:warning: please provide the same reference to the object when re-rendering your component, or else the countries menu will re-render on each input change, which is bad for performance. |
 
 **Note**: some props are forced:
 - `select`: forced to be `false`.
