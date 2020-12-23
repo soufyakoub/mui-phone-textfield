@@ -5,11 +5,13 @@ insert_final_newline = true
 charset = utf-8
 trim_trailing_whitespace = true
 
-[*.{js,py}]
+[*.{js,py,tsx,jinja}]
 indent_style = tab
+tab_width = 4
 
 [README.md]
 indent_style = tab
+tab_width = 4
 
 [*.yml]
 indent_style = space
