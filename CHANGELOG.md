@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/soufyakoub/mui-phone-textfield/compare/v1.0.0...v1.0.1) (2020-12-23)
+
+
+### Bug Fixes
+
+* added missing flags ([6058858](https://github.com/soufyakoub/mui-phone-textfield/commit/605885868b298a8ccc6c1a16224b1ec17f8cdc30))
+
 # 1.0.0 (2020-12-22)
 
 
