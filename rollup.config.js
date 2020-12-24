@@ -42,4 +42,7 @@ export default {
 		}),
 		production && terser(),
 	],
+	watch: {
+		exclude: /node_modules/,
+	},
 };

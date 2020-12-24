@@ -32,7 +32,10 @@ module.exports = env => ({
 		contentBase: path.join(__dirname, 'public'),
 		port: 3000,
 		liveReload: true,
-		open: true
+		open: true,
+		watchOptions: {
+			ignored: /node_modules/,
+		},
 	},
 	optimization: {
 		runtimeChunk: 'single',
@@ -54,5 +57,5 @@ module.exports = env => ({
 				},
 			},
 		},
-	}
+	},
 });
