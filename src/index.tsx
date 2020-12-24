@@ -4,7 +4,6 @@ import TextField, { TextFieldProps } from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import CountriesMenu, { CountriesMenuProps } from "./CountriesMenu";
 import { CountryCode, AsYouType, PhoneNumber, getCountries } from "libphonenumber-js";
-import clone from "lodash/clone";
 
 type OnCountrySelectData = {
 	/** The formatted value for the selected country. Extracted from the `value` prop. */
