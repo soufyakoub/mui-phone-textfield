@@ -43,7 +43,7 @@ export interface CountriesMenuProps {
 }
 
 function CountriesMenu({ selectedCountry, countryDisplayNames, onItemClick }: CountriesMenuProps) {
-	const ITEM_SIZE = 45;
+	const ITEM_SIZE = 60;
 	const MENU_WIDTH = 300;
 	// specZ: The maximum height of a simple menu should be one or more rows less than the view
 	// height. This ensures a tapable area outside of the simple menu with which to dismiss
@@ -96,11 +96,7 @@ function CountriesMenu({ selectedCountry, countryDisplayNames, onItemClick }: Co
 					itemCount={menuData.length}>
 
 					{({ index, style }) => <ListItem
-						style={{
-							...style,
-							paddingTop: 0,
-							paddingBottom: 0,
-						}}
+						style={style}
 						onClick={handleMenuItemClick}
 						data-country-code={menuData[index].countryCode}
 						data-calling-code={menuData[index].callingCode}
