@@ -4,6 +4,10 @@ language: node_js
 node_js:
   - lts/*
 
+cache:
+  - directories:
+    - /opt/pyenv/versions/3.8.6
+
 # upgrade pyenv
 before_install:
   - cd $(pyenv root)
@@ -11,7 +15,7 @@ before_install:
   - cd -
 
 install:
-  - pyenv install 3.8.6
+  - pyenv install --skip-existing 3.8.6
   - pyenv global 3.8.6
   - pip install pipenv
   - pipenv install
