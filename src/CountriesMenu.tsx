@@ -6,7 +6,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Popover from "@material-ui/core/Popover";
 import { makeStyles } from '@material-ui/core/styles';
 import { CountryCallingCode, CountryCode, getCountries, getCountryCallingCode } from "libphonenumber-js";
-import { FixedSizeList } from "react-window";
+import { FixedSizeList, ListChildComponentProps } from "react-window";
 import ArrowDropDownIcon from './ArrowDropDownIcon';
 import Flag from "./Flag";
 import territoriesJson from "cldr-localenames-full/main/en/territories.json";
@@ -90,31 +90,52 @@ function CountriesMenu({ selectedCountry, countryDisplayNames, onItemClick }: Co
 				}}>
 
 				<FixedSizeList
+					itemData={{
+						handleMenuItemClick,
+						selectedCountry,
+						countryDisplayNames,
+					}}
 					height={MENU_HEIGHT}
 					width={MENU_WIDTH}
 					itemSize={ITEM_SIZE}
 					itemCount={menuData.length}>
-
-					{({ index, style }) => <ListItem
-						style={style}
-						onClick={handleMenuItemClick}
-						data-country-code={menuData[index].countryCode}
-						data-calling-code={menuData[index].callingCode}
-						selected={menuData[index].countryCode === selectedCountry}
-						button
-						dense>
-						<ListItemIcon>
-							<Flag countryCode={menuData[index].countryCode} className={classes.flag_border} />
-						</ListItemIcon>
-						<ListItemText
-							primary={countryDisplayNames?.[menuData[index].countryCode] || menuData[index].countryName}
-							secondary={"+" + menuData[index].callingCode} />
-					</ListItem>}
-
+					{FixedSizeListItem}
 				</FixedSizeList>
 			</Popover>
 		</>
 	);
+}
+
+function FixedSizeListItem({ index, style, data }: ListChildComponentProps) {
+	const {
+		handleMenuItemClick,
+		selectedCountry,
+		countryDisplayNames,
+	} = data;
+
+	const {
+		countryCode,
+		countryName,
+		callingCode,
+	} = menuData[index];
+
+	const classes = useStyles();
+
+	return <ListItem
+		style={style}
+		onClick={handleMenuItemClick}
+		data-country-code={countryCode}
+		data-calling-code={callingCode}
+		selected={countryCode === selectedCountry}
+		button
+		dense>
+		<ListItemIcon>
+			<Flag countryCode={countryCode} className={classes.flag_border} />
+		</ListItemIcon>
+		<ListItemText
+			primary={countryDisplayNames?.[countryCode] || countryName}
+			secondary={"+" + callingCode} />
+	</ListItem>;
 }
 
 export default memo(CountriesMenu);
