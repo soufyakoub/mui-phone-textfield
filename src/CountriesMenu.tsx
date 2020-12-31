@@ -1,4 +1,4 @@
-import React, { useState, MouseEvent, memo } from 'react';
+import React, { useState, MouseEvent, memo, useRef, KeyboardEvent, useEffect } from 'react';
 import Button from '@material-ui/core/Button';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -51,6 +51,9 @@ function CountriesMenu({ selectedCountry, countryDisplayNames, onItemClick }: Co
 	const MENU_HEIGHT = window.innerHeight - ITEM_SIZE * 2;
 	const classes = useStyles();
 	const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+	const [currentIndex, setCurrentIndex] = useState(0);
+	const [itemsFocusable, setItemsFocusable] = useState(false);
+	const fixedSizeListRef = useRef<FixedSizeList>(null);
 
 	const handleClick = (event: MouseEvent<HTMLElement>) => {
 		setAnchorEl(event.currentTarget);
@@ -58,6 +61,15 @@ function CountriesMenu({ selectedCountry, countryDisplayNames, onItemClick }: Co
 
 	const handleClose = () => {
 		setAnchorEl(null);
+	};
+
+	const handleEntered = () => {
+		setItemsFocusable(true);
+	};
+
+	const handleExited = () => {
+		setCurrentIndex(0);
+		setItemsFocusable(false);
 	};
 
 	const handleMenuItemClick = (event: MouseEvent<HTMLElement>) => {
@@ -68,6 +80,53 @@ function CountriesMenu({ selectedCountry, countryDisplayNames, onItemClick }: Co
 
 		onItemClick({ countryCode, callingCode });
 	};
+
+	const focusItemByIndex = (index: number) => {
+		setCurrentIndex(index);
+		fixedSizeListRef.current?.scrollToItem(index, "auto");
+	}
+
+	const handleKeyDown = (event: KeyboardEvent) => {
+		event.preventDefault();
+
+		switch (event.key) {
+
+			case "Tab":
+			case "Escape":
+				handleClose();
+				break;
+
+			case "ArrowUp":
+				let previous_index = currentIndex - 1;
+
+				if (previous_index < 0) {
+					previous_index = menuData.length - 1;
+				}
+
+				focusItemByIndex(previous_index);
+				break;
+
+			case "ArrowDown":
+				let next_index = currentIndex + 1;
+
+				if (next_index >= menuData.length) {
+					next_index = 0;
+				}
+
+				focusItemByIndex(next_index);
+				break;
+
+			case "End":
+				focusItemByIndex(menuData.length - 1);
+				break;
+
+			case "Home":
+				focusItemByIndex(0);
+				break;
+
+			default: break;
+		}
+	}
 
 	return (
 		<>
@@ -81,10 +140,12 @@ function CountriesMenu({ selectedCountry, countryDisplayNames, onItemClick }: Co
 			</Button>
 
 			<Popover
-				keepMounted
 				anchorEl={anchorEl}
 				open={Boolean(anchorEl)}
+				onEntered={handleEntered}
+				onExited={handleExited}
 				onClose={handleClose}
+				onKeyDown={handleKeyDown}
 				PaperProps={{
 					id: "countries-menu",
 				}}>
@@ -92,9 +153,11 @@ function CountriesMenu({ selectedCountry, countryDisplayNames, onItemClick }: Co
 				<FixedSizeList
 					itemData={{
 						handleMenuItemClick,
-						selectedCountry,
 						countryDisplayNames,
+						currentIndex,
+						itemsFocusable,
 					}}
+					ref={fixedSizeListRef}
 					height={MENU_HEIGHT}
 					width={MENU_WIDTH}
 					itemSize={ITEM_SIZE}
@@ -109,8 +172,9 @@ function CountriesMenu({ selectedCountry, countryDisplayNames, onItemClick }: Co
 function FixedSizeListItem({ index, style, data }: ListChildComponentProps) {
 	const {
 		handleMenuItemClick,
-		selectedCountry,
 		countryDisplayNames,
+		currentIndex,
+		itemsFocusable,
 	} = data;
 
 	const {
@@ -119,14 +183,23 @@ function FixedSizeListItem({ index, style, data }: ListChildComponentProps) {
 		callingCode,
 	} = menuData[index];
 
+	const should_be_focused = currentIndex === index;
+
+	const ref = useRef<HTMLDivElement>(null);
 	const classes = useStyles();
+
+	useEffect(() => {
+		if (should_be_focused && itemsFocusable) {
+			ref.current?.focus();
+		}
+	}, [should_be_focused, itemsFocusable]);
 
 	return <ListItem
 		style={style}
+		ref={ref}
 		onClick={handleMenuItemClick}
 		data-country-code={countryCode}
 		data-calling-code={callingCode}
-		selected={countryCode === selectedCountry}
 		button
 		dense>
 		<ListItemIcon>
