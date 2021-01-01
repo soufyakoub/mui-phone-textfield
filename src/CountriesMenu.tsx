@@ -1,5 +1,6 @@
-import React, { useState, MouseEvent, memo, useRef, KeyboardEvent, useEffect } from 'react';
+import React, { useState, MouseEvent, memo, useRef, KeyboardEvent, useEffect, forwardRef } from 'react';
 import Button from '@material-ui/core/Button';
+import List from "@material-ui/core/List";
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -54,6 +55,8 @@ function CountriesMenu({ selectedCountry, countryDisplayNames, onItemClick }: Co
 	const [currentIndex, setCurrentIndex] = useState(0);
 	const [itemsFocusable, setItemsFocusable] = useState(false);
 	const fixedSizeListRef = useRef<FixedSizeList>(null);
+
+	const open = Boolean(anchorEl);
 
 	const handleClick = (event: MouseEvent<HTMLElement>) => {
 		setAnchorEl(event.currentTarget);
@@ -131,8 +134,9 @@ function CountriesMenu({ selectedCountry, countryDisplayNames, onItemClick }: Co
 	return (
 		<>
 			<Button
-				aria-controls="countries-menu"
-				aria-haspopup="true"
+				aria-haspopup="menu"
+				aria-expanded={open}
+				aria-controls="countries"
 				onClick={handleClick}
 				className={classes.flag_button}>
 				<Flag countryCode={selectedCountry} className={classes.flag_border} />
@@ -141,14 +145,11 @@ function CountriesMenu({ selectedCountry, countryDisplayNames, onItemClick }: Co
 
 			<Popover
 				anchorEl={anchorEl}
-				open={Boolean(anchorEl)}
 				onEntered={handleEntered}
+				open={open}
 				onExited={handleExited}
 				onClose={handleClose}
-				onKeyDown={handleKeyDown}
-				PaperProps={{
-					id: "countries-menu",
-				}}>
+				onKeyDown={handleKeyDown}>
 
 				<FixedSizeList
 					itemData={{
@@ -158,6 +159,7 @@ function CountriesMenu({ selectedCountry, countryDisplayNames, onItemClick }: Co
 						itemsFocusable,
 					}}
 					ref={fixedSizeListRef}
+					innerElementType={InnerElement}
 					height={MENU_HEIGHT}
 					width={MENU_WIDTH}
 					itemSize={ITEM_SIZE}
@@ -182,10 +184,11 @@ function FixedSizeListItem({ index, style, data }: ListChildComponentProps) {
 		countryName,
 		callingCode,
 	} = menuData[index];
+	const countryDisplayName = countryDisplayNames?.[countryCode] || countryName;
 
 	const should_be_focused = currentIndex === index;
 
-	const ref = useRef<HTMLDivElement>(null);
+	const ref = useRef<HTMLLIElement>(null);
 	const classes = useStyles();
 
 	useEffect(() => {
@@ -197,6 +200,10 @@ function FixedSizeListItem({ index, style, data }: ListChildComponentProps) {
 	return <ListItem
 		style={style}
 		ref={ref}
+		// Somehow the orca screen reader isn't working unless I use a roving tabindex.
+		tabIndex={should_be_focused ? 0 : -1}
+		component="li"
+		role="menuitem"
 		onClick={handleMenuItemClick}
 		data-country-code={countryCode}
 		data-calling-code={callingCode}
@@ -206,9 +213,24 @@ function FixedSizeListItem({ index, style, data }: ListChildComponentProps) {
 			<Flag countryCode={countryCode} className={classes.flag_border} />
 		</ListItemIcon>
 		<ListItemText
-			primary={countryDisplayNames?.[countryCode] || countryName}
+			primaryTypographyProps={{
+				"aria-label": `country name is ${countryDisplayName}`,
+			}}
+			secondaryTypographyProps={{
+				"aria-label": `calling code is ${callingCode}`,
+			}}
+			primary={countryDisplayName}
 			secondary={"+" + callingCode} />
 	</ListItem>;
 }
+
+const InnerElement = forwardRef<HTMLOListElement, any>((props, ref) => {
+	return <List
+		{...props}
+		component="ol"
+		role="menu"
+		aria-label="countries"
+		ref={ref} />
+});
 
 export default memo(CountriesMenu);
