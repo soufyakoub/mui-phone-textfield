@@ -1,4 +1,4 @@
-import React, { useState, MouseEvent, memo, useRef, KeyboardEvent, useEffect, forwardRef } from 'react';
+import React, { useState, MouseEvent, useRef, KeyboardEvent, useEffect, forwardRef } from 'react';
 import Button from '@material-ui/core/Button';
 import List from "@material-ui/core/List";
 import ListItem from '@material-ui/core/ListItem';
@@ -39,7 +39,7 @@ export interface CountriesMenuProps {
 	onItemClick: (data: { countryCode: CountryCode, callingCode: CountryCallingCode }) => void,
 }
 
-export default memo((props: CountriesMenuProps) => {
+export default (props: CountriesMenuProps) => {
 	const {
 		selectedCountry,
 		countryDisplayNames,
@@ -174,7 +174,7 @@ export default memo((props: CountriesMenuProps) => {
 			</Popover>
 		</>
 	);
-});
+};
 
 function FixedSizeListItem({ index, style, data }: ListChildComponentProps) {
 	const {
