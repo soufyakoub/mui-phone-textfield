@@ -6,7 +6,7 @@
 # mui-phone-textfield
 > A phone number input for Material-UI.
 
-![different variants of the same component](https://media.giphy.com/media/QM9ikg4lwuClWrCIZJ/giphy.gif)
+![different variants of the same component](https://media.giphy.com/media/dfEkB4SEErQuv6l68I/giphy.gif)
 
 [Live demo](https://soufyakoub.github.io/mui-phone-textfield/)
 
@@ -53,37 +53,41 @@ function Example() {
 		value={value}
 		country={country}
 		onCountrySelect={onCountrySelect}
-		onChange={onChange} />;
+		onChange={onChange}
+	/>;
 }
 ```
 
 ## API
 
-In addtion to [TextField](https://material-ui.com/api/text-field/#props)'s props, The component accepts the following:
+In addtion to [TextField](https://material-ui.com/api/text-field/#props)'s props (except `onChange`, `select` and `type`), The component accepts the following:
 
 | prop | type | description|
 |-|-|-|
-| country | string | The selected country. [A two-letter ISO country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements). |
-| onCountrySelect | function | Callback fired when a user selects a country from the menu. |
-| onChange | function | Callback fired when the input value changes. |
-| countryDisplayNames | object | An object that maps a [A two-letter ISO country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements) to a country name. can be used for localisation.<br/><br/>:warning: Changing the object reference on each re-render will cause a performance hit, becaue the countries menu will be re-rendered on each input value change. |
+| country | string | The selected country. A [two-letter ISO country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements). |
+| [onCountrySelect](https://github.com/soufyakoub/mui-phone-textfield/blob/main/README.md#oncountryselect) | function | Callback fired when a user selects a country from the menu. |
+| [onChange](https://github.com/soufyakoub/mui-phone-textfield/blob/main/README.md#onchange) | function | Callback fired when the input value changes. |
+| countryDisplayNames | object | An object that maps a [two-letter ISO country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements) to a country name. can be used for localisation. |
 
-**Note**: Some props are forced:
-- `select`: Forced to be `false`.
-- `type`: Forced to be `"tel"`.
-- The `startAdornment` key of `InputProps` is reserved for the countries menu, but all the others are left untouched.
+**Note**: The `startAdornment` key of `InputProps` prop is reserved for the countries menu, but all the other keys are left untouched.
 
 ## Event listeners
 
-- `onCountrySelect`: Callback fired when a user selects a country from the menu. It receives an object with these properties:
-	- `formattedValue` {string | undefined}: The formatted value for the selected country. Extracted from the `value` prop.
-	- `phoneNumber` {object | undefined}: An instance of the [PhoneNumber](https://github.com/catamphetamine/libphonenumber-js/blob/master/README.md#phonenumber) class, or `undefined` if no valid phone number could be parsed from the `value` prop.
-	- `country` {string}: The selected country. [A two-letter ISO country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements).
+### onCountrySelect
 
-- `onChange`: Callback fired when the input value changes. It receives an object with these properties:
-	- `formattedValue` {string}: The formatted value for the selected country. Extracted from the input value.
-	- `phoneNumber` {object | undefined}: An instance of the [PhoneNumber](https://github.com/catamphetamine/libphonenumber-js/blob/master/README.md#phonenumber) class, or `undefined` if no valid phone number could be parsed from the input value.
-	- `event` {object}: The original event that triggered the `onChange` handler.
+Callback fired when a user selects a country from the menu. It receives an object with these properties:
+
+- `formattedValue` {string | undefined}: The formatted value for the selected country. Extracted from the `value` prop.
+- `phoneNumber` {object | undefined}: An instance of the [PhoneNumber](https://github.com/catamphetamine/libphonenumber-js/blob/master/README.md#phonenumber) class, or `undefined` if no valid phone number could be parsed from the `value` prop.
+- `country` {string}: The selected country. A [two-letter ISO country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements).
+
+### onChange
+
+Callback fired when the input value changes. It receives an object with these properties:
+
+- `formattedValue` {string}: The formatted value for the selected country. Extracted from the input value.
+- `phoneNumber` {object | undefined}: An instance of the [PhoneNumber](https://github.com/catamphetamine/libphonenumber-js/blob/master/README.md#phonenumber) class, or `undefined` if no valid phone number could be parsed from the input value.
+- `event` {object}: The original event that triggered the `onChange` handler.
 
 ## Contributing
 
