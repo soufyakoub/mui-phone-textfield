@@ -93,6 +93,7 @@ const PhoneTextField = (props: PhoneTextFieldProps) => {
 		{...rest}
 		select={false}
 		type="tel"
+		value={value}
 		onChange={onChange ? internalOnChange : undefined}
 		InputProps={{
 			...InputProps,
