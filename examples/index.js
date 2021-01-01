@@ -36,7 +36,8 @@ function Example(props) {
 			value={value}
 			country={country}
 			onCountrySelect={onCountrySelect}
-			onChange={onChange} />
+			onChange={onChange}
+		/>
 		<br /><br />
 		<div>International: {phoneNumber?.format("INTERNATIONAL")}</div>
 		<div>National: {phoneNumber?.format("NATIONAL")}</div>

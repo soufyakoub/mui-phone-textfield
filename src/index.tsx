@@ -41,10 +41,13 @@ export type PhoneTextFieldProps = Omit<TextFieldProps, "onChange"> & {
 };
 
 const countryCodes = getCountries();
-const countryDisplayNamesShape = countryCodes.reduce((obj, countryCode) => {
-	obj[countryCode] = PropTypes.string;
-	return obj;
-}, {} as Record<CountryCode, typeof PropTypes.string>);
+const countryDisplayNamesShape = countryCodes.reduce(
+	(obj, countryCode) => {
+		obj[countryCode] = PropTypes.string;
+		return obj;
+	},
+	{} as Record<CountryCode, typeof PropTypes.string>
+);
 
 class PhoneTextField extends Component<PhoneTextFieldProps> {
 	// If a prop is used inside PhoneTextField

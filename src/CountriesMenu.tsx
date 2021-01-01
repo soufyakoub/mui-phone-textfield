@@ -13,16 +13,12 @@ import Flag from "./Flag";
 import territoriesJson from "cldr-localenames-full/main/en/territories.json";
 
 const useStyles = makeStyles(() => ({
-	flag_button: {
+	button: {
 		padding: 2,
 	},
-	flag_border: {
+	flag: {
 		borderRadius: 4,
 	},
-	menu_list: {
-		// IOS momentum scrolling.
-		WebkitOverflowScrolling: 'touch',
-	}
 }));
 
 const defaultTerritoryDisplayNames = territoriesJson.main.en.localeDisplayNames.territories;
@@ -30,7 +26,7 @@ const menuData = getCountries()
 	.map(countryCode => ({
 		countryCode,
 		callingCode: getCountryCallingCode(countryCode),
-		countryName: defaultTerritoryDisplayNames[countryCode]
+		countryName: defaultTerritoryDisplayNames[countryCode],
 	}))
 	.sort((a, b) => a.countryName.localeCompare(b.countryName));
 
@@ -40,16 +36,16 @@ export interface CountriesMenuProps {
 	/** A map of names to be displayed in the menu for each country code. */
 	countryDisplayNames?: Record<CountryCode, string>,
 	/** Callback fired when an item from the menu is clicked. */
-	onItemClick: (data: { countryCode: CountryCode, callingCode: CountryCallingCode }) => void
+	onItemClick: (data: { countryCode: CountryCode, callingCode: CountryCallingCode }) => void,
 }
 
-function CountriesMenu({ selectedCountry, countryDisplayNames, onItemClick }: CountriesMenuProps) {
-	const ITEM_SIZE = 60;
-	const MENU_WIDTH = 300;
-	// specZ: The maximum height of a simple menu should be one or more rows less than the view
-	// height. This ensures a tapable area outside of the simple menu with which to dismiss
-	// the menu.
-	const MENU_HEIGHT = window.innerHeight - ITEM_SIZE * 2;
+export default memo((props: CountriesMenuProps) => {
+	const {
+		selectedCountry,
+		countryDisplayNames,
+		onItemClick,
+	} = props;
+
 	const classes = useStyles();
 	const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 	const [currentIndex, setCurrentIndex] = useState(0);
@@ -57,8 +53,14 @@ function CountriesMenu({ selectedCountry, countryDisplayNames, onItemClick }: Co
 	const fixedSizeListRef = useRef<FixedSizeList>(null);
 
 	const open = Boolean(anchorEl);
+	const ITEM_SIZE = 60;
+	const MENU_WIDTH = 300;
+	// specZ: The maximum height of a simple menu should be one or more rows less than the view
+	// height. This ensures a tapable area outside of the simple menu with which to dismiss
+	// the menu.
+	const MENU_HEIGHT = window.innerHeight - ITEM_SIZE * 2;
 
-	const handleClick = (event: MouseEvent<HTMLElement>) => {
+	const handleButtonClick = (event: MouseEvent<HTMLElement>) => {
 		setAnchorEl(event.currentTarget);
 	};
 
@@ -137,9 +139,10 @@ function CountriesMenu({ selectedCountry, countryDisplayNames, onItemClick }: Co
 				aria-haspopup="menu"
 				aria-expanded={open}
 				aria-controls="countries"
-				onClick={handleClick}
-				className={classes.flag_button}>
-				<Flag countryCode={selectedCountry} className={classes.flag_border} />
+				onClick={handleButtonClick}
+				className={classes.button}
+			>
+				<Flag countryCode={selectedCountry} className={classes.flag} />
 				<ArrowDropDownIcon />
 			</Button>
 
@@ -149,8 +152,8 @@ function CountriesMenu({ selectedCountry, countryDisplayNames, onItemClick }: Co
 				open={open}
 				onExited={handleExited}
 				onClose={handleClose}
-				onKeyDown={handleKeyDown}>
-
+				onKeyDown={handleKeyDown}
+			>
 				<FixedSizeList
 					itemData={{
 						handleMenuItemClick,
@@ -163,13 +166,15 @@ function CountriesMenu({ selectedCountry, countryDisplayNames, onItemClick }: Co
 					height={MENU_HEIGHT}
 					width={MENU_WIDTH}
 					itemSize={ITEM_SIZE}
-					itemCount={menuData.length}>
+					itemCount={menuData.length}
+				>
 					{FixedSizeListItem}
+
 				</FixedSizeList>
 			</Popover>
 		</>
 	);
-}
+});
 
 function FixedSizeListItem({ index, style, data }: ListChildComponentProps) {
 	const {
@@ -184,8 +189,8 @@ function FixedSizeListItem({ index, style, data }: ListChildComponentProps) {
 		countryName,
 		callingCode,
 	} = menuData[index];
-	const countryDisplayName = countryDisplayNames?.[countryCode] || countryName;
 
+	const countryDisplayName = countryDisplayNames?.[countryCode] || countryName;
 	const should_be_focused = currentIndex === index;
 
 	const ref = useRef<HTMLLIElement>(null);
@@ -208,9 +213,10 @@ function FixedSizeListItem({ index, style, data }: ListChildComponentProps) {
 		data-country-code={countryCode}
 		data-calling-code={callingCode}
 		button
-		dense>
+		dense
+	>
 		<ListItemIcon>
-			<Flag countryCode={countryCode} className={classes.flag_border} />
+			<Flag countryCode={countryCode} className={classes.flag} />
 		</ListItemIcon>
 		<ListItemText
 			primaryTypographyProps={{
@@ -220,7 +226,8 @@ function FixedSizeListItem({ index, style, data }: ListChildComponentProps) {
 				"aria-label": `calling code is ${callingCode}`,
 			}}
 			primary={countryDisplayName}
-			secondary={"+" + callingCode} />
+			secondary={"+" + callingCode}
+		/>
 	</ListItem>;
 }
 
@@ -230,7 +237,7 @@ const InnerElement = forwardRef<HTMLOListElement, any>((props, ref) => {
 		component="ol"
 		role="menu"
 		aria-label="countries"
-		ref={ref} />
+		ref={ref}
+		disablePadding
+	/>
 });
-
-export default memo(CountriesMenu);
