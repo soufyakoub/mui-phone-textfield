@@ -1,6 +1,6 @@
 {
   "name": "mui-phone-textfield",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "A phone number input for Material-UI.",
   "main": "dist/cjs/bundle.js",
   "module": "dist/esm/bundle.js",

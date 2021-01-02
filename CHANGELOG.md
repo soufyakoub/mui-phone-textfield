@@ -1,3 +1,17 @@
+# [2.1.0](https://github.com/soufyakoub/mui-phone-textfield/compare/v2.0.0...v2.1.0) (2021-01-02)
+
+
+### Bug Fixes
+
+* added missing TextField's value prop ([e45db21](https://github.com/soufyakoub/mui-phone-textfield/commit/e45db2173860cd1d756d9f9dd9629ae13014606e))
+
+
+### Features
+
+* **menu:** added support for basic keyboard navigation ([2eddd72](https://github.com/soufyakoub/mui-phone-textfield/commit/2eddd72d39ad20aa5802bce43a7e58da8b685f4d))
+* **menu:** improved accessibility ([a72d040](https://github.com/soufyakoub/mui-phone-textfield/commit/a72d0402995d6f3d32b54fe2eab0f7ccdcc3a977))
+* **menu:** items are less dense ([18e47fa](https://github.com/soufyakoub/mui-phone-textfield/commit/18e47fac6e7fe2f1486f9a3d901a8d27ee91ec80))
+
 # [2.0.0](https://github.com/soufyakoub/mui-phone-textfield/compare/v1.0.1...v2.0.0) (2020-12-23)
 
 
