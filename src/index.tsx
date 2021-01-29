@@ -9,6 +9,7 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import Popover from "@material-ui/core/Popover";
 import { makeStyles } from "@material-ui/core/styles";
+import grey from "@material-ui/core/colors/grey";
 import { AsYouType, PhoneNumber, getCountries, getCountryCallingCode, CountryCode } from "libphonenumber-js";
 import { FixedSizeList, ListChildComponentProps } from "react-window";
 import Flag from "./Flag";
@@ -55,6 +56,9 @@ const useStyles = makeStyles(() => ({
 	},
 	flag: {
 		borderRadius: 4,
+		borderWidth: 1,
+		borderStyle: "solid",
+		borderColor: grey[300],
 	},
 }));
 
