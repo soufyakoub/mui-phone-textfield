@@ -1,3 +1,11 @@
+# [2.2.0](https://github.com/soufyakoub/mui-phone-textfield/compare/v2.1.0...v2.2.0) (2021-01-29)
+
+
+### Features
+
+* **menubutton:** removed dropdown arrow from the menu button ([f55f474](https://github.com/soufyakoub/mui-phone-textfield/commit/f55f47462e31e4bd771c48f22b0ed162c2b430dc))
+* **menubutton:** the flag is now nested in an IconButton instead of a normal button ([7293431](https://github.com/soufyakoub/mui-phone-textfield/commit/72934311e0a392a01c7279a014fb48f910ffa345))
+
 # [2.1.0](https://github.com/soufyakoub/mui-phone-textfield/compare/v2.0.0...v2.1.0) (2021-01-02)
 
 
