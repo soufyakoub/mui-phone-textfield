@@ -2,7 +2,7 @@ import React, { ChangeEvent, useState, MouseEvent, useRef, KeyboardEvent, useEff
 import PropTypes from "prop-types";
 import TextField, { TextFieldProps } from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
-import Button from "@material-ui/core/Button";
+import IconButton from "@material-ui/core/IconButton";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
@@ -50,8 +50,8 @@ export type PhoneTextFieldProps = Omit<TextFieldProps, "onChange" | "select" | "
 };
 
 const useStyles = makeStyles(() => ({
-	button: {
-		padding: 2,
+	iconButtonSmall: {
+		padding: 9,
 	},
 	flag: {
 		borderRadius: 4,
@@ -209,15 +209,18 @@ const PhoneTextField = (props: PhoneTextFieldProps) => {
 			InputProps={{
 				...InputProps,
 				startAdornment: <InputAdornment position="start">
-					<Button
+					<IconButton
+						size={rest.size}
 						aria-haspopup="menu"
 						aria-expanded={open}
 						aria-controls="countries"
 						onClick={handleButtonClick}
-						className={classes.button}
+						classes={{
+							sizeSmall: classes.iconButtonSmall,
+						}}
 					>
-						<Flag countryCode={country} className={classes.flag} />
-					</Button>
+						<Flag countryCode={country} className={classes.flag} compensate />
+					</IconButton>
 				</InputAdornment>,
 			}}
 		/>

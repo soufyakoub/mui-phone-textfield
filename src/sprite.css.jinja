@@ -12,6 +12,12 @@
 	border: 1px solid #e0e0e0;
 }
 
+/* Adds equal bottom and top margin to compensate for the difference between height and width. */
+.flag-margin-compensate {
+	margin-top: {{(flag.width - flag.height) // 2}}px;
+	margin-bottom: {{(flag.width - flag.height) // 2}}px;
+}
+
 {% for country_code, position in flag.positions.items() %}
 .flag-{{country_code}} {
 	background-position: -{{position.x}}px -{{position.y}}px;
