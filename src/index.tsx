@@ -59,7 +59,8 @@ const useStyles = makeStyles(() => ({
 }));
 
 const defaultTerritoryDisplayNames = territoriesJson.main.en.localeDisplayNames.territories;
-const menuData = getCountries()
+const countryCodes = getCountries();
+const menuData = countryCodes
 	.map(countryCode => ({
 		countryCode,
 		callingCode: getCountryCallingCode(countryCode),
@@ -320,19 +321,10 @@ const FixedSizeListInnerElement = forwardRef<HTMLOListElement, any>((props, ref)
 	/>
 });
 
-const countryCodes = getCountries();
-const countryDisplayNamesShape = countryCodes.reduce(
-	(obj, countryCode) => {
-		obj[countryCode] = PropTypes.string;
-		return obj;
-	},
-	{} as Record<CountryCode, typeof PropTypes.string>
-);
-
 // If a prop is used inside PhoneTextField instead of passing it directly to TextField,
 // its corresponding propType should be specified.
 PhoneTextField.propTypes = {
-	countryDisplayNames: PropTypes.shape(countryDisplayNamesShape),
+	countryDisplayNames: PropTypes.object,
 	country: PropTypes.oneOf(countryCodes),
 	onCountrySelect: PropTypes.func,
 	onChange: PropTypes.func,
