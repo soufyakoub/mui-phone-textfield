@@ -11,7 +11,6 @@ import Popover from "@material-ui/core/Popover";
 import { makeStyles } from "@material-ui/core/styles";
 import { AsYouType, PhoneNumber, getCountries, getCountryCallingCode, CountryCode } from "libphonenumber-js";
 import { FixedSizeList, ListChildComponentProps } from "react-window";
-import ArrowDropDownIcon from "./ArrowDropDownIcon";
 import Flag from "./Flag";
 import territoriesJson from "cldr-localenames-full/main/en/territories.json";
 
@@ -218,7 +217,6 @@ const PhoneTextField = (props: PhoneTextFieldProps) => {
 						className={classes.button}
 					>
 						<Flag countryCode={country} className={classes.flag} />
-						<ArrowDropDownIcon />
 					</Button>
 				</InputAdornment>,
 			}}
