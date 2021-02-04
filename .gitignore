@@ -1,6 +1,5 @@
 .vscode
-src/sprite.jss.json
-src/sprite.png
+src/assets
 node_modules
 examples/public/bundle.js
 dist
