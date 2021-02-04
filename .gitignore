@@ -1,5 +1,5 @@
 .vscode
-src/sprite.css
+src/sprite.jss.json
 src/sprite.png
 node_modules
 examples/public/bundle.js

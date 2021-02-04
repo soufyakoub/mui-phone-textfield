@@ -1,24 +1,20 @@
 import resolve from '@rollup/plugin-node-resolve';
-import postcss from 'rollup-plugin-postcss';
-import postcss_assets from "postcss-assets";
-import cssnano from "cssnano";
 import json from "@rollup/plugin-json";
 import ts from "@wessberg/rollup-plugin-ts";
+import smartAsset from "rollup-plugin-smart-asset";
 import { terser } from "rollup-plugin-terser";
-import path from "path";
 import pkg from "./package.json";
 
-const production = process.env.NODE_ENV === "production";
-const extensions = ['.ts', '.tsx', '.js', '.json'];
+const isProduction = process.env.NODE_ENV === "production";
 const externals = [
 	...Object.keys(pkg.peerDependencies),
 	...Object.keys(pkg.dependencies),
 ];
 
 export default {
-	input: path.join(__dirname, "src", 'index.tsx'),
+	input: "src/index.tsx",
 	output: [
-		production && {
+		isProduction && {
 			file: pkg.main,
 			format: 'cjs',
 			exports: "named",
@@ -32,15 +28,23 @@ export default {
 	],
 	external: id => new RegExp(externals.join("|")).test(id),
 	plugins: [
-		resolve({ extensions }),
-		postcss({ plugins: [postcss_assets(), production && cssnano()] }),
+		smartAsset({
+			url: "copy",
+			assetsPath: "../assets", // relative to the output directory.
+			useHash: false,
+			keepImport: true,
+			sourceMap: true,
+		}),
+		resolve({
+			extensions: ['.ts', '.tsx', '.js', '.json'],
+		}),
 		json(),
 		ts({
 			transpiler: "babel",
 			exclude: "node_modules/**/*",
-			tsconfig: resolvedConfig => ({ ...resolvedConfig, declaration: production }),
+			tsconfig: resolvedConfig => ({ ...resolvedConfig, declaration: isProduction }),
 		}),
-		production && terser(),
+		isProduction && terser(),
 	],
 	watch: {
 		exclude: /node_modules/,

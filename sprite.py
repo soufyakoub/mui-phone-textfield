@@ -9,7 +9,7 @@ flag_paths = glob("flags/*.png")
 
 # padding between each column/row in the sprite.
 # https://stackoverflow.com/questions/646901/do-i-still-need-to-pad-images-in-a-css-sprite
-padding = 4
+PADDING = 4
 
 # Here, we assume that all images have the same size
 # and we calculate the dimensions of the generated sprite.
@@ -21,8 +21,8 @@ num_cols = ceil(len(flag_paths) / num_rows)
 sprite = Image.new(
     "RGBA",
     (
-        flag_width * num_cols + padding * (num_cols - 1),
-        flag_height * num_rows + padding * (num_rows - 1),
+        flag_width * num_cols + PADDING * (num_cols - 1),
+        flag_height * num_rows + PADDING * (num_rows - 1),
     ),
 )
 
@@ -35,13 +35,11 @@ except ValueError:
     flag_paths.remove("flags\\default.png")
 sprite.paste(Image.open("flags/default.png"), (0, 0))
 
-# We'll collect flag positions in the sprite image so we can generate the corresponding CSS classes later.
-flag_positions = {}
-
 # Filling columns from top to bottom, and from left to right.
+flag_positions = {}
 for index, path in enumerate(flag_paths, 1):
-    x = (flag_width + padding) * (index // num_rows)
-    y = (flag_height + padding) * (index % num_rows)
+    x = (flag_width + PADDING) * (index // num_rows)
+    y = (flag_height + PADDING) * (index % num_rows)
     country_code = os.path.basename(path).split(".")[0]
 
     flag = Image.open(path)
@@ -49,36 +47,37 @@ for index, path in enumerate(flag_paths, 1):
     flag.close()
     flag_positions[country_code] = {"x": x, "y": y}
 
-# Generating the sprite's corresponding css classes.
-loader = jinja2.FileSystemLoader("./")
-env = jinja2.Environment(loader=loader)
-template = env.get_template("src/sprite.css.jinja")
-
-# We will pass half the values to the css template,
-# because to support retina displays,
-# the sprite actually has double the size.
-css = template.render(
-    {
-        "sprite": {
-            "path": "sprite.png",  # The sprite's relative path from the src directory.
-            "width": sprite.size[0] // 2,
-            "height": sprite.size[1] // 2,
-        },
-        "flag": {
-            "width": flag_width // 2,
-            "height": flag_height // 2,
-            "positions": {
-                country_code: {"x": position["x"] // 2, "y": position["y"] // 2}
-                for country_code, position in flag_positions.items()
-            },
-        },
+# generating the jss object that will be used in the withStyles hook.
+# To support retina displays, the sprite actually has double the size,
+# so we'll use half the values.
+jss = {
+    country_code: {
+        "backgroundPosition": [[-position["x"] // 2, -position["y"] // 2]],
     }
-)
+    for country_code, position in flag_positions.items()
+}
 
-with open("src/sprite.css", "w") as file:
-    file.write(css)
-print("Generated sprite.css")
+jss["flag"] = {
+    "backgroundRepeat": "no-repeat",
+    "backgroundSize": [[sprite.size[0] // 2, sprite.size[1] // 2]],
+    "width": flag_width // 2,
+    "height": flag_height // 2,
+    "display": "inline-block",
+    "overflow": "hidden",
+    "position": "relative",
+    "boxSizing": "content-box",
+}
+
+compensation = (flag_width // 2 - flag_height // 2) // 2
+jss["compensate"] = {
+    "marginTop": compensation,
+    "marginBottom": compensation,
+}
+
+with open("src/sprite.jss.json", "w") as file:
+    json.dump(jss, file, indent=2)
+    print("Generated src/sprite.jss.json")
 
 # Quantize the result sprite to reduce its size then save it.
 sprite.quantize().save("src/sprite.png")
-print("Generated sprite.png")
+print("Generated src/sprite.png")

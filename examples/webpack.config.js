@@ -23,6 +23,13 @@ module.exports = env => ({
 				},
 				exclude: /node_modules/
 			},
+			{
+				test: /\.(png|svg|jpg|jpeg|gif)$/i,
+				loader: 'file-loader',
+				options: {
+					outputPath: "images",
+				},
+			},
 		],
 	},
 	plugins: [
