@@ -4,6 +4,11 @@ from math import sqrt, ceil
 import os
 import json
 import jinja2
+import shutil
+
+# Cleanup
+shutil.rmtree("src/assets", True)
+os.mkdir("src/assets")
 
 flag_paths = glob("flags/*.png")
 
@@ -74,10 +79,12 @@ jss["compensate"] = {
     "marginBottom": compensation,
 }
 
-with open("src/sprite.jss.json", "w") as file:
+with open("src/assets/sprite.jss.json", "w") as file:
     json.dump(jss, file, indent=2)
-    print("Generated src/sprite.jss.json")
+    print("Generated src/assets/sprite.jss.json")
 
 # Quantize the result sprite to reduce its size then save it.
-sprite.quantize().save("src/sprite.png")
-print("Generated src/sprite.png")
+sprite.quantize().save("src/assets/sprite_x2.png")
+print("Generated src/assets/sprite_x2.png")
+sprite.resize((sprite.size[0] // 2, sprite.size[1] // 2)).quantize().save("src/assets/sprite_x1.png")
+print("Generated src/assets/sprite_x1.png")
