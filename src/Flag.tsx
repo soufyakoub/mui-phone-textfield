@@ -1,6 +1,8 @@
 import { CountryCode } from "libphonenumber-js";
 import React from "react";
-import "./sprite.css";
+import { makeStyles } from "@material-ui/core/styles";
+import sprite from "./sprite.png";
+import jss from "./sprite.jss.json";
 
 interface FlagProps extends React.HTMLAttributes<HTMLDivElement> {
 	/** The country corresponding to the displayed flag. */
@@ -9,11 +11,22 @@ interface FlagProps extends React.HTMLAttributes<HTMLDivElement> {
 	compensate?: boolean,
 }
 
+// @ts-ignore string literals in an imported json are typed with the general type "string", which throws false type errors.
+const useStyles = makeStyles(() => ({
+	...jss,
+	flag: {
+		...jss.flag,
+		backgroundImage: `url(${sprite})`,
+	}
+}));
+
 export default function Flag({ className, countryCode, compensate, ...props }: FlagProps) {
+	const classes = useStyles();
+
 	const classNames = [
-		"flag",
-		countryCode && `flag-${countryCode}`,
-		compensate && "flag-margin-compensate",
+		classes.flag,
+		countryCode && classes[countryCode],
+		compensate && classes.compensate,
 		className,
 	];
 
