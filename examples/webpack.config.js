@@ -9,7 +9,7 @@ module.exports = env => ({
 		filename: '[chunkhash].js',
 		publicPath: env.NODE_ENV === "production"
 			// This is the base path in the github-pages examples website. (the name of the github repository)
-			? "/mui-phone-textfield"
+			? "/mui-phone-textfield/"
 			// Using a relative path here so that after `npm run dev`,
 			// the `index.html` file can be inspected in the browser without launching a server.
 			: "",
