@@ -24,6 +24,9 @@ Via [yarn][4]
 yarn add mui-phone-textfield
 ```
 
+You also have to handle **image** import/require in your bundler of choice.
+For example, here's how to do it in [webpack][19].
+
 ## Usage
 The component can be used the same way as the [TextField][5] component from [Material-UI][6] with some [additional props][7]:
 
@@ -149,3 +152,4 @@ Please follow the [conventional commits][16] specification, because [semantic-re
 [16]: https://www.conventionalcommits.org/en/v1.0.0/
 [17]: https://github.com/semantic-release/semantic-release
 [18]: LICENSE
+[19]: https://webpack.js.org/guides/asset-management/#loading-images
