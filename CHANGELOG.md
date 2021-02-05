@@ -1,3 +1,10 @@
+# [2.3.0](https://github.com/soufyakoub/mui-phone-textfield/compare/v2.2.0...v2.3.0) (2021-02-05)
+
+
+### Features
+
+* **sprite:** two versions are available for normal and retina displays ([40a6341](https://github.com/soufyakoub/mui-phone-textfield/commit/40a6341fd195fb1bdc37ca2bbd626336d8387507))
+
 # [2.2.0](https://github.com/soufyakoub/mui-phone-textfield/compare/v2.1.0...v2.2.0) (2021-01-29)
 
 
