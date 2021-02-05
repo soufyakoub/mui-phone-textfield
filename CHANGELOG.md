@@ -1,3 +1,17 @@
+# [3.0.0](https://github.com/soufyakoub/mui-phone-textfield/compare/v2.2.0...v3.0.0) (2021-02-05)
+
+
+### Features
+
+* **sprite:** images are external to the js bundle ([8aec39b](https://github.com/soufyakoub/mui-phone-textfield/commit/8aec39b3a8bccbfe62df2e9261e739a3faafdaff))
+* **sprite:** two versions are available, for normal and retina displays ([438872b](https://github.com/soufyakoub/mui-phone-textfield/commit/438872ba0d22781f173dee5864077aaf0e9d441d))
+
+
+### BREAKING CHANGES
+
+* **sprite:** the user is now responsible for processing any
+import/require to the sprite image using a bundler like webpack
+
 # [2.2.0](https://github.com/soufyakoub/mui-phone-textfield/compare/v2.1.0...v2.2.0) (2021-01-29)
 
 
