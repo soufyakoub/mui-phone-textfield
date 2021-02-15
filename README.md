@@ -12,6 +12,11 @@
 
 ## Installation
 
+First, make sure you can handle **image** import/require in your bundler of choice.
+For example, here's how to do it in [webpack][19].
+
+Then to install this package:
+
 Via [npm][3]
 
 ```sh
@@ -23,9 +28,6 @@ Via [yarn][4]
 ```sh
 yarn add mui-phone-textfield
 ```
-
-You also have to handle **image** import/require in your bundler of choice.
-For example, here's how to do it in [webpack][19].
 
 ## Usage
 The component can be used the same way as the [TextField][5] component from [Material-UI][6] with some [additional props][7]:
@@ -72,7 +74,7 @@ In addtion to [TextField's props][8] (except `onChange`, `select` and `type`), T
 | [onChange][11] | function | Callback fired when the input value changes. |
 | countryDisplayNames | object | An object that maps a [two-letter ISO country code][9] to a country name. can be used for localisation. |
 
-**Note**: The `startAdornment` key of `InputProps` prop is reserved for the countries menu, but all the other keys are left untouched.
+**Note**: The `startAdornment` key of `InputProps` is reserved for the menu of countries, but all the other keys are left untouched.
 
 ## Event listeners
 
