@@ -41,7 +41,7 @@ type OnChangeData = {
 
 export type PhoneTextFieldProps = Omit<TextFieldProps, "onChange" | "select" | "type"> & {
 	/** A map of names to be displayed in the menu for each country code. */
-	countryDisplayNames?: Record<CountryCode, string>,
+	countryDisplayNames?: Partial<Record<CountryCode, string>>,
 	/** The currently selected country. */
 	country?: CountryCode,
 	/** Callback fired when a user selects a country from the menu. */
