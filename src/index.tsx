@@ -327,7 +327,7 @@ const FixedSizeListInnerElement = forwardRef<HTMLOListElement, any>((props, ref)
 // If a prop is used inside PhoneTextField instead of passing it directly to TextField,
 // its corresponding propType should be specified.
 PhoneTextField.propTypes = {
-	countryDisplayNames: PropTypes.object,
+	countryDisplayNames: PropTypes.objectOf(PropTypes.string),
 	country: PropTypes.oneOf(countryCodes),
 	onCountrySelect: PropTypes.func,
 	onChange: PropTypes.func,
