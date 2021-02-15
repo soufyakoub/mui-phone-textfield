@@ -1,3 +1,15 @@
+# [3.1.0](https://github.com/soufyakoub/mui-phone-textfield/compare/v3.0.0...v3.1.0) (2021-02-15)
+
+
+### Bug Fixes
+
+* **typescript:** make properties of countryDisplayNames optional ([9d426ce](https://github.com/soufyakoub/mui-phone-textfield/commit/9d426ced53103ef21a2d97d0b0f1051c9665251d))
+
+
+### Features
+
+* **proptypes:** accept only string values in countryDisplayNames ([1dae4d6](https://github.com/soufyakoub/mui-phone-textfield/commit/1dae4d63db799d0d6e6015eba0139d6a36d59f23))
+
 # [3.0.0](https://github.com/soufyakoub/mui-phone-textfield/compare/v2.2.0...v3.0.0) (2021-02-05)
 
 
