@@ -4,7 +4,6 @@
   "description": "A phone number input for Material-UI.",
   "main": "dist/cjs/bundle.js",
   "module": "dist/esm/bundle.js",
-  "types": "dist/esm/bundle.d.ts",
   "files": [
     "dist/**/*"
   ],
