@@ -1,7 +1,7 @@
 import resolve from '@rollup/plugin-node-resolve';
 import json from "@rollup/plugin-json";
 import ts from "@wessberg/rollup-plugin-ts";
-import smartAsset from "rollup-plugin-smart-asset";
+import externalAssets from "rollup-plugin-external-assets";
 import { terser } from "rollup-plugin-terser";
 import pkg from "./package.json";
 
@@ -15,26 +15,22 @@ export default {
 	input: "src/index.tsx",
 	output: [
 		isProduction && {
-			file: pkg.main,
+			dir: "dist",
+			entryFileNames: "cjs/bundle.js",
 			format: 'cjs',
 			exports: "named",
 			sourcemap: true,
 		},
 		{
-			file: pkg.module,
-			format: 'esm',
+			dir: "dist",
+			entryFileNames: "esm/bundle.js",
+			format: 'es',
 			sourcemap: true,
 		}
 	],
 	external: id => new RegExp(externals.join("|")).test(id),
 	plugins: [
-		smartAsset({
-			url: "copy",
-			assetsPath: "../assets", // relative to the output directory.
-			useHash: false,
-			keepImport: true,
-			sourceMap: true,
-		}),
+		externalAssets("src/assets/*.png"),
 		resolve({
 			extensions: ['.ts', '.tsx', '.js', '.json'],
 		}),

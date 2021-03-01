@@ -94,7 +94,7 @@
     "react-dom": "^17.0.1",
     "rimraf": "^3.0.2",
     "rollup": "^2.34.2",
-    "rollup-plugin-smart-asset": "^2.1.0",
+    "rollup-plugin-external-assets": "^1.0.0",
     "rollup-plugin-terser": "^7.0.2",
     "semantic-release": "^17.3.0",
     "typescript": "^4.1.3",
